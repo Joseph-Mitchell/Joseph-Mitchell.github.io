@@ -20,3 +20,23 @@ header h1:before {
     content: revert;
     font-size: revert;
 }
+
+a:link {
+    color: #ffd846;
+    text-shadow: 0 0 5px rgb(255 216 70 / 50%);
+}
+
+a:visited {
+    color: #ffd846;
+    text-shadow: 0 0 5px rgb(255 216 70 / 50%);
+}
+
+a:hover {
+    color: rgb(249, 255, 219);
+    text-shadow: 0 0 5px rgb(255 216 70 / 50%);
+}
+
+a:active {
+    color: rgb(142, 124, 8);
+    text-shadow: 0 0 5px rgb(255 216 70 / 50%);
+}
