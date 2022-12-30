@@ -1,9 +1,7 @@
+---
 layout: page
 title: "Home"
+---
 
-<!DOCTYPE html>
-<html>
-	<body>
-	
-	</body>
-</html>
+# Hi
+Welcome to my portfolio, which is currently empty. Shucks
