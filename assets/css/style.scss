@@ -10,3 +10,12 @@ body{
 h1, h2, h3, h4, h5, h6 {
     color: #ffd846;
 }
+
+header h1 {
+    color: #ffd846;
+}
+
+header h1:before {
+    content: revert;
+    font-size: revert;
+}
