@@ -4,15 +4,15 @@
 @import "{{ site.theme }}";
 
 body{
-    background:#151515 url("../images/bkg.png") 0 0
+    background:rgb(21, 21, 21) url("../images/bkg.png") 0 0
 }
 
 h1, h2, h3, h4, h5, h6 {
-    color: #ffd846;
+    color: rgb(255, 216, 70);
 }
 
 header h1 {
-    color: #ffd846;
+    color: rgb(255, 216, 70);
     margin: 0 0 0 0px;
 }
 
@@ -22,21 +22,21 @@ header h1:before {
 }
 
 a:link {
-    color: #ffd846;
+    color: rgb(255, 216, 70);
     text-shadow: 0 0 5px rgba(255, 215, 70, 0.5);
 }
 
 a:visited {
-    color: #ffd846;
+    color: rgb(255, 216, 70);
     text-shadow: 0 0 5px rgba(255, 215, 70, 0.5);
 }
 
 a:hover {
-    color: #f9ffdb;
-    text-shadow: 0 0 5px rgba(255, 215, 70, 0.5);
+    color: rgb(249, 255, 219);
+    text-shadow: 0 0 5px rgba(249, 255, 219, 0.5);
 }
 
 a:active {
-    color: #8e7c08;
-    text-shadow: 0 0 5px rgba(255, 215, 70, 0.5);
+    color: rgb(142, 124, 8);
+    text-shadow: 0 0 5px rgba(142, 124, 8, 0.5);
 }
