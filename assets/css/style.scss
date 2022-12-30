@@ -23,20 +23,20 @@ header h1:before {
 
 a:link {
     color: #ffd846;
-    text-shadow: 0 0 5px rgb(255 216 70 / 50%);
+    text-shadow: 0 0 5px rgba(255, 215, 70, 0.5);
 }
 
 a:visited {
     color: #ffd846;
-    text-shadow: 0 0 5px rgb(255 216 70 / 50%);
+    text-shadow: 0 0 5px rgba(255, 215, 70, 0.5);
 }
 
 a:hover {
-    color: rgb(249, 255, 219);
-    text-shadow: 0 0 5px rgb(255 216 70 / 50%);
+    color: #f9ffdb;
+    text-shadow: 0 0 5px rgba(255, 215, 70, 0.5);
 }
 
 a:active {
-    color: rgb(142, 124, 8);
-    text-shadow: 0 0 5px rgb(255 216 70 / 50%);
+    color: #8e7c08;
+    text-shadow: 0 0 5px rgba(255, 215, 70, 0.5);
 }
