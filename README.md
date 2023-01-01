@@ -1,4 +1,4 @@
-# Joseph Mitchells Portfolio
+# Joseph Mitchell's Portfolio
 
 A simple portfolio website showing some of the projects I have worked on.
 
