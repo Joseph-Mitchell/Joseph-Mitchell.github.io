@@ -12,6 +12,10 @@ header h1 {
     margin: 0 0 0 0px;
 }
 
+header h2 {
+    text-shadow: 0 0 5px rgba(255, 216, 70, 0.1), 0 0 5px rgba(255, 216, 70, 0.1), 0 0 10px rgba(255, 216, 70, 0.1)
+}
+
 header h1:before {
     content: revert;
     font-size: revert;
@@ -23,27 +27,27 @@ body{
 
 h1, h2, h3, h4, h5, h6 {
     color: rgb(255, 216, 70);
-    text-shadow: 0 1px 1px rgba(255, 216, 70, 0.1), 0 0 5px rgba(255, 216, 70, 0.1), 0 0 10px rgba(255, 216, 70, 0.1);
+    text-shadow: 0 0 5px rgba(255, 215, 70, 0.75);
 }
 
 a:link {
     color: rgb(255, 216, 70);
-    text-shadow: 0 0 5px rgba(255, 215, 70, 0.5);
+    text-shadow: 0 0 5px rgba(255, 215, 70, 0.75);
 }
 
 a:visited {
     color: rgb(255, 216, 70);
-    text-shadow: 0 0 5px rgba(255, 215, 70, 0.5);
+    text-shadow: 0 0 5px rgba(255, 215, 70, 0.75);
 }
 
 a:hover {
     color: rgb(249, 255, 219);
-    text-shadow: 0 0 5px rgba(249, 255, 219, 0.5);
+    text-shadow: 0 0 5px rgba(249, 255, 219, 0.75);
 }
 
 a:active {
     color: rgb(142, 124, 8);
-    text-shadow: 0 0 5px rgba(142, 124, 8, 0.5);
+    text-shadow: 0 0 5px rgba(142, 124, 8, 0.75);
 }
 
 pre {
