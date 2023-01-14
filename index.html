@@ -9,40 +9,56 @@ title: "Home"
     grid-template-columns: 33% 33% 33%;
     margin: auto;
   }
-  .gridelement {
+  .grid a{
     height: 200px;
     border: 3px solid rgb(255, 216, 70);
     border-radius: 5px;
     margin: 10px;
     padding: 10px;
     text-align: center;
-    line-height: 0.5;
+    line-height: 0.25;
+    text-decoration: none
   }
-  .gridthumbnail {
+  .grid a:hover{
+    border-color: rgb(249, 255, 219);
+  }
+  .grid a:hover h2{
+    color: rgb(249, 255, 219);
+    text-shadow: 0 0 5px rgba(249, 255, 219, 0.5);
+  }
+  .grid a:active{
+    border-color: rgb(142, 124, 8);
+  }
+  .grid a:active h2{
+    color: rgb(142, 124, 8);
+    text-shadow: 0 0 5px rgba(142, 124, 8, 0.5);
+  }
+  .grid a img{
     height: 75%;
     max-width: 100%;
     display: block;
-    margin: auto auto 8px auto;
+    margin: auto auto 15px auto;
     object-fit: contain;
+    border: 1px solid rgb(255, 216, 70);
   }
 </style>
 
 <div class="grid">
-  <a class="gridelement" href="projects/Bone-king.html">
-    <img class="gridthumbnail" src="assets/images/thumbnails/1.png">
+  <a href="projects/Bone-king.html">
+    <img src="assets/images/thumbnails/1.png">
     <h2>The Bone King</h2>
     <p>Mar-2018</p>
   </a>
 
-  <a class="gridelement" href="404.html">
+  <a href="404.html">
     2
   </a>
 
-  <a class="gridelement" href="404.html">
+  <a href="404.html">
     3
   </a>
 
-  <a class="gridelement" href="404.html">
+  <a href="404.html">
     4
   </a>
 </div>
