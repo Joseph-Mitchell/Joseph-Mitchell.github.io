@@ -51,4 +51,5 @@ plugins:
 #   - vendor/ruby/
 
 collections:
-  - projects
+  projects:
+    output: true
