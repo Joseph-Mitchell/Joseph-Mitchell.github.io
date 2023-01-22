@@ -56,21 +56,12 @@ title: "Home"
 </style>
 
 <div class="grid">
-  <a href="projects/Bone-king.html">
-    <img src="assets/images/thumbnails/1.png">
-    <h2>The Bone King</h2>
-    <p>Mar-2018</p>
+  {% assign projects = site.projects %}
+  {% for project in projects %}
+  <a href="projects/{{project.title}}.html">
+    <img src="assets/images/thumbnails/{{project.title}}.png">
+    <h2>{{project.title}}</h2>
+    <p>{{project.datestring}}</p>
   </a>
-
-  <a href="404.html">
-    2
-  </a>
-
-  <a href="404.html">
-    3
-  </a>
-
-  <a href="404.html">
-    4
-  </a>
+  {% endfor %}
 </div>
