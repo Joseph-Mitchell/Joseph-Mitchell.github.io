@@ -22,6 +22,11 @@ header h1:before {
     font-size: revert;
 }
 
+.btn-linkedin .icon {
+    opacity: 0.6;
+    background: url("../images/linkedin.png") 0 0 no-repeat;
+}
+
 body{
     background:rgb(21, 21, 21) url("../images/bkg.png") 0 0
 }
