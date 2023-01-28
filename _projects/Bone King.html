@@ -4,6 +4,15 @@ layout: project
 datestring: "March 2018"
 github_link: "https://github.com/Joseph-Mitchell/Bone-King"
 ---
+<style>
+    img {
+        margin: auto;
+        border: 3px solid rgb(255, 216, 70);
+        border-radius: 5px;
+        box-shadow: 0px 0px 5px 0px rgba(255, 216, 70, 0.75);
+        width: 50%;
+    }
+</style>
 
 <h2>Summary</h2>
 <p>
@@ -11,3 +20,55 @@ github_link: "https://github.com/Joseph-Mitchell/Bone-King"
     but this was the first game we made completely on our own. Part of the task was to pick an old arcade game to replicate, and so I chose to remake the original Donkey Kong. 
     The game itself is made using <a href="https://www.monogame.net/">MonoGame</a>, a .NET framework which provides some basic tools to program a game without being a full game engine itself.
 </p>
+<h2>Project Highlights</h2>
+<h3>Collision Boxes</h3>
+<p>
+    Each significant object within the game has a number of collision boxes for different mechanics. Some uses of these hitboxes are self explanitory, but some are worth showcasing here.
+    The below examples are supplimented with images which show each objects different hitbox types with different colours.
+</p>
+<h4 style="text-align:center">Level</h4>
+<img src="../assets/images/Bone King/1.png">
+<p>
+    The red boxes are used for ground collisions. When the players feet are in contact with the ground, the player is moved up to stand on top of these hitboxes. 
+    This allows the player to smoothly move along stepped terrain as is featured within the level.
+</p>
+<p>
+    The green boxes are used to let the player climb up ladders. If the player is standing in front of one of these hitboxes and presses up they will begin to climb the ladder.
+</p>
+<p>
+    The blue boxes are used to climb over a ladder to the next platform, climb down from a platform onto a ladder and for bones to roll down ladders. 
+    If the player is climbing up a ladder and reaches one of the blue hitboxes they will climb over and onto the next platform. 
+    If the player is infront of a blue hitbox and presses the down arrow they will begin to climb down the ladder.
+    If a bone passes by a blue hitbox there is a random 1 in 8 chance that the bone with begin to roll down the ladder.
+</p>
+<p>
+    The yellow box is the goal hitbox. If the player contacts the goal hitbox, they will be progressed to the next level.
+</p>
+<h4 style="text-align:center">Player Character</h4>
+<img src="../assets/images/Bone King/2.png">
+<p>
+    The red box is the main hitbox, used to detect collisions with bones and skulls in order to put the player character into a death state, 
+    as well as determining if the player is in front of a ladder and ready to begin climbing, or if the player has reached the end goal.
+</p>
+<p>
+    The thin blue box is used to detect collisions with the ground and keep the player from falling through the floor.
+</p>
+<p>
+    The thin green box halfway up the body is used exclusively for determining if the player has reached the top of a ladder, and causes the player to climb up onto the next platform.
+</p>
+<p>
+    The large green box to the side of the player is the axe hitbox. This hitbox is used when the player is holding the axe, and is used to destroy a bone infront of the player if the axe is in the "down" position.
+    This hitbox changes position depending on which direction the player is facing.
+</p>
+<h4 style="text-align:center">Bones</h4>
+<img src="../assets/images/Bone King/3.png">
+<p>
+    The red box is used to collide with the ground as well as with ladders.
+</p>
+<p>
+    The blue box - which has the same dimensions as the red box when not on a ladder - is used exclusively to interact with the player and trigger a death state.
+</p>
+<p>
+    The thin yellow box also interacts with the player, and causes an increase in score when collided with by the player jumping above the bone.
+</p>
+ 
