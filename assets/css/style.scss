@@ -73,6 +73,10 @@ th {
     border-bottom: 1px dashed rgb(255, 216, 70);
 }
 
+img {
+    display: block;
+}
+
 #project-title {
     text-align: center;
     line-height: 0.3;
@@ -83,7 +87,6 @@ th {
 }
 
 #project-img {
-    display: block;
     margin: auto;
     border: 3px solid rgb(255, 216, 70);
     border-radius: 5px;
