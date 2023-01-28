@@ -59,7 +59,7 @@ title: "Home"
 <div class="grid">
   {% assign projects = site.projects %}
   {% for project in projects %}
-  <a href="projects/{{project.title}}.html">
+  <a href="projects/{{project.title}}.html" target="_self">
     <img src="assets/images/thumbnails/{{project.title}}.png">
     <h2>{{project.title}}</h2>
     <p>{{project.datestring}}</p>
