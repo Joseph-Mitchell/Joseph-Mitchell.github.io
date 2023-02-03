@@ -62,7 +62,7 @@ title: "Home"
   <a href="projects/{{project.title}}.html" target="_self">
     <img src="assets/images/thumbnails/{{project.title}}.png">
     <h2>{{project.title}}</h2>
-    <p>{{project.datestring}}</p>
+    <p>{{project.date | date: "%b %Y"}}</p>
   </a>
   {% endfor %}
 </div>
