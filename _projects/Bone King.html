@@ -2,7 +2,8 @@
 title: "Bone King"
 layout: project
 date: "March 2018"
-github_link: "https://github.com/Joseph-Mitchell/Bone-King"
+links: ["https://github.com/Joseph-Mitchell/Bone-King"]
+link_names: ["GitHub"]
 ---
 
 <h2>Summary</h2>
@@ -18,7 +19,7 @@ github_link: "https://github.com/Joseph-Mitchell/Bone-King"
     The below examples are supplimented with images which show each objects different hitbox types with different colours.
 </p>
 <h4>Level</h4>
-<img src="{{layout.image-source}}{{page.title}}/1.png">
+<img src="{{layout.image_source}}{{page.title}}/1.png">
 <p>
     The red boxes are used for ground collisions. When the players feet are in contact with the ground, the player is moved up to stand on top of these hitboxes. 
     This allows the player to smoothly move along stepped terrain as is featured within the level.
@@ -36,7 +37,7 @@ github_link: "https://github.com/Joseph-Mitchell/Bone-King"
     The yellow box is the goal hitbox. If the player contacts the goal hitbox, they will be progressed to the next level.
 </p>
 <h4>Player Character</h4>
-<img src="{{layout.image-source}}{{page.title}}/2.png">
+<img src="{{layout.image_source}}{{page.title}}/2.png">
 <p>
     The red box is the main hitbox, used to detect collisions with bones and skulls in order to put the player character into a death state, 
     as well as determining if the player is in front of a ladder and ready to begin climbing, or if the player has reached the end goal.
@@ -52,7 +53,7 @@ github_link: "https://github.com/Joseph-Mitchell/Bone-King"
     This hitbox changes position depending on which direction the player is facing.
 </p>
 <h4>Bones</h4>
-<img src="{{layout.image-source}}{{page.title}}/3.png">
+<img src="{{layout.image_source}}{{page.title}}/3.png">
 <p>
     The red box is used to collide with the ground as well as with ladders.
 </p>
