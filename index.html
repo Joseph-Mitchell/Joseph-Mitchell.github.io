@@ -57,7 +57,7 @@ title: "Home"
 
 <h1 style="text-align: center;">Projects</h1>
 <div class="grid">
-  {% assign projects = site.projects %}
+  {% assign projects = site.projects | sort:"date" | reverse %}
   {% for project in projects %}
   <a href="projects/{{project.title}}.html" target="_self">
     <img src="assets/images/thumbnails/{{project.title}}.png">
