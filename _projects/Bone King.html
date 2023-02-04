@@ -12,13 +12,12 @@ link_names: ["GitHub"]
     but this was the first game we made completely on our own. Part of the task was to pick an old arcade game to replicate, and so I chose to remake the original Donkey Kong. 
     The game itself is made using <a href="https://www.monogame.net/">MonoGame</a>, a .NET framework which provides some basic tools to program a game without being a full game engine itself.
 </p>
-<h2>Project Highlights</h2>
-<h3>Collision Boxes</h3>
+<h2>Collision Boxes</h2>
 <p>
     Each significant object within the game has a number of collision boxes for different mechanics. Some uses of these hitboxes are self explanitory, but some are worth showcasing here.
     The below examples are supplimented with images which show each objects different hitbox types with different colours.
 </p>
-<h4>Level</h4>
+<h3>Level</h3>
 <img src="{{layout.image_source}}{{page.title}}/1.png">
 <p>
     The red boxes are used for ground collisions. When the players feet are in contact with the ground, the player is moved up to stand on top of these hitboxes. 
@@ -36,7 +35,7 @@ link_names: ["GitHub"]
 <p>
     The yellow box is the goal hitbox. If the player contacts the goal hitbox, they will be progressed to the next level.
 </p>
-<h4>Player Character</h4>
+<h3>Player Character</h3>
 <img src="{{layout.image_source}}{{page.title}}/2.png">
 <p>
     The red box is the main hitbox, used to detect collisions with bones and skulls in order to put the player character into a death state, 
@@ -52,7 +51,7 @@ link_names: ["GitHub"]
     The large green box to the side of the player is the axe hitbox. This hitbox is used when the player is holding the axe, and is used to destroy a bone infront of the player if the axe is in the "down" position.
     This hitbox changes position depending on which direction the player is facing.
 </p>
-<h4>Bones</h4>
+<h3>Bones</h3>
 <img src="{{layout.image_source}}{{page.title}}/3.png">
 <p>
     The red box is used to collide with the ground as well as with ladders.
