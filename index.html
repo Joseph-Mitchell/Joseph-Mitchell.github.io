@@ -60,7 +60,7 @@ title: "Home"
   {% assign projects = site.projects | sort:"date" | reverse %}
   {% for project in projects %}
   <a href="projects/{{project.title}}.html" target="_self">
-    <img src="assets/images/thumbnails/{{project.title}}.png">
+    <img src="assets/images/{{project.title}}/thumbnail.png">
     <h2>{{project.title}}</h2>
     <p>{{project.date | date: "%b %Y"}}</p>
   </a>
