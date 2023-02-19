@@ -61,6 +61,14 @@ title: "Home"
   }
   .date {
     font-size: small;
+    margin: auto auto 8px auto;
+  }
+  .tag {
+    background-color: rgba(255, 216, 70, 0.2);
+    margin-right: 4px;
+    padding: 0px 3px 0px 3px;
+    border-radius: 2px;
+    float: left;
   }
 </style>
 
@@ -72,6 +80,9 @@ title: "Home"
     <img class="thumbnail" src="../assets/images/{{project.title}}/thumbnail.png">
     <h2 class="proj-title">{{project.title}}</h2>
     <p class="date">{{project.date | date: "%b %Y"}}</p>
+    {% for tag in project.tags %}
+    <div class="tag">{{project.tags[forloop.index0]}}</div>
+    {% endfor %}
   </a>
   {% endfor %}
 </div>
