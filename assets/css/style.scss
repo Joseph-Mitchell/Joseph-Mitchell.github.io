@@ -3,6 +3,12 @@
 
 @import "{{ site.theme }}";
 
+@media only screen and (max-device-width: 480px) {
+    .container{
+        text-align: center;
+    }
+}
+
 header {
     border-bottom: 1px dashed rgb(255, 216, 70);
 }
