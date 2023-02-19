@@ -4,10 +4,9 @@
 @import "{{ site.theme }}";
 
 @media only screen and (max-device-width: 480px) {
-    .container{
+    #header{
         text-align: center;
     }
-    body {text-align: left;}
 }
 
 header {
