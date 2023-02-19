@@ -23,29 +23,26 @@ title: "Home"
     text-align: center;
     line-height: 1.25;
   }
-  .grid a h2 {
+  .proj-title{
     margin: auto;
-  }
-  .grid a p {
-    margin: auto
   }
   .grid a:hover{
     border-color: rgb(249, 255, 219);
     box-shadow: 0px 0px 5px 0px rgba(249, 255, 219, 0.75);
   }
-  .grid a:hover h2{
+  a:hover .proj-title{
     color: rgb(249, 255, 219);
     text-shadow: 0 0 5px rgba(249, 255, 219, 0.75);
   }
-  .grid a:active{
+  a:active{
     border-color: rgb(142, 124, 8);
     box-shadow: 0px 0px 5px 0px rgba(142, 124, 8, 0.75);
   }
-  .grid a:active h2{
+  a:active .proj-title{
     color: rgb(142, 124, 8);
     text-shadow: 0 0 5px rgba(142, 124, 8, 0.75);
   }
-  .grid a img{
+  .thumbnail{
     max-height: 160px;
     display: block;
     margin: auto auto 7px auto;
@@ -54,13 +51,16 @@ title: "Home"
     border-radius: 3px;
     box-shadow: 0px 0px 3px 0px rgba(255, 216, 70, 0.75);
   }
-  .grid a:hover img{
+  a:hover .thumbnail{
     border-color: rgb(249, 255, 219);
     box-shadow: 0px 0px 3px 0px rgba(249, 255, 219, 0.75);
   }
-  .grid a:active img{
+  a:active .thumbnail{
     border-color: rgb(142, 124, 8);
     box-shadow: 0px 0px 3px 0px rgba(142, 124, 8, 0.75);
+  }
+  .date {
+    font-size: small;
   }
 </style>
 
@@ -69,9 +69,9 @@ title: "Home"
   {% assign projects = site.projects | sort:"date" | reverse %}
   {% for project in projects %}
   <a href="/projects/{{project.title}}.html" target="_self">
-    <img src="../assets/images/{{project.title}}/thumbnail.png">
-    <h2>{{project.title}}</h2>
-    <p>{{project.date | date: "%b %Y"}}</p>
+    <img class="thumbnail" src="../assets/images/{{project.title}}/thumbnail.png">
+    <h2 class="proj-title">{{project.title}}</h2>
+    <p class="date">{{project.date | date: "%b %Y"}}</p>
   </a>
   {% endfor %}
 </div>
