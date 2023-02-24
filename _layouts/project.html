@@ -35,14 +35,7 @@ image_source: "/assets/images/"
 
     #project-date {
         text-align: center;
-    }
-
-    #project-img {
-        margin: auto;
-        border: 3px solid rgb(255, 216, 70);
-        border-radius: 5px;
-        box-shadow: 0px 0px 5px 0px rgba(255, 216, 70, 0.75);
-        width: 75%;
+        margin-bottom: 10px;
     }
 
     #project-links {
@@ -50,11 +43,49 @@ image_source: "/assets/images/"
         color: rgb(255, 216, 70);
         text-shadow: 0 0 5px rgba(255, 215, 70, 0.75);
     }
+
+    #gallery {
+        margin: auto;
+        width: 75%;
+        height: 450px;
+    }
+
+    .slide {
+        height: 100%;
+        width: auto;
+    }
 </style>
 
 <h1 id="project-title">{{page.title}}</h1>
 <h4 id="project-date">{{page.date | date: "%b %Y"}}</h4>
-<img id="project-img" src="../assets/images/{{page.title}}/thumbnail.png">
+
+<div id="gallery">
+    {% for i in (1..page.images) %}
+    <img class="slide" src="/assets/images/{{page.title}}/gall{{i}}.png">
+    {% endfor %}
+    <button onclick="changeSlide(-1)">&lt;</button>
+    <button onclick="changeSlide(1)">&gt;</button>
+</div>
+<script>
+    var slideIndex = 1;
+    showSlide(slideIndex);
+    function changeSlide(n) {
+        showSlide(slideIndex += n);
+    }
+    function showSlide(n) {
+        var slides = document.getElementsByClassName("slide");
+        if (n > slides.length) {
+            slideIndex = 1
+        }
+        if (n < 1) {
+            slideIndex = slides.length
+        }
+        for (var i = 0; i < slides.length; i++) {
+            slides[i].style.display = "none";
+        }
+        slides[slideIndex-1].style.display = "block";
+    }
+</script>
 
 {% if page.links and page.link_names %}
 <p id="project-links">Links: 
