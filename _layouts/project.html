@@ -31,6 +31,7 @@ image_source: "/assets/images/"
 
     #project-title {
         text-align: center;
+        margin: auto;
     }
 
     #project-date {
@@ -46,13 +47,51 @@ image_source: "/assets/images/"
 
     #gallery {
         margin: auto;
+        position: relative;
         width: 75%;
         height: 450px;
+        border: 3px solid rgb(255, 216, 70);
+        border-radius: 5px;
+        box-shadow: 0px 0px 5px 0px rgba(255, 216, 70, 0.75);
     }
 
     .slide {
         height: 100%;
         width: auto;
+        border: none;
+        border-radius: 0;
+        box-shadow: none;
+    }
+
+    #nextslide, #prevslide {
+        cursor: pointer;
+        position: absolute;
+        top: 0px;
+        left: 0px;
+        height: 100%;
+        padding: 0 16px 0 16px;
+        color: rgba(255, 255, 255, 0.5);
+        text-shadow: none;
+        background-color: rgb(6, 0, 13, 0.5);
+        font-weight: bold;
+        font-size: 20px;
+        border: none;
+        user-select: none;
+    }
+
+    #nextslide:hover, #prevslide:hover {
+        color: rgb(255, 216, 70);
+        text-shadow: 0 0 5px rgba(255, 215, 70, 0.75);
+    }
+
+    #nextslide {
+        left: auto;
+        right: 0px;
+    }
+
+    .caption {
+        text-align: center;
+        font-size: small;
     }
 </style>
 
@@ -63,8 +102,11 @@ image_source: "/assets/images/"
     {% for i in (1..page.images) %}
     <img class="slide" src="/assets/images/{{page.title}}/gall{{i}}.png">
     {% endfor %}
-    <button onclick="changeSlide(-1)">&lt;</button>
-    <button onclick="changeSlide(1)">&gt;</button>
+    <button id="prevslide" onclick="changeSlide(-1)">&lt;</button>
+    <button id="nextslide" onclick="changeSlide(1)">&gt;</button>
+    <div id="gallpips">
+        ...
+    </div>
 </div>
 <script>
     var slideIndex = 1;
