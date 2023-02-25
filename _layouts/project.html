@@ -70,7 +70,7 @@ image_source: "/assets/images/"
         left: 0px;
         height: 100%;
         padding: 0 16px 0 16px;
-        color: rgba(255, 255, 255, 0.5);
+        color: rgb(6, 0, 13, 0.5);
         text-shadow: none;
         background-color: rgb(6, 0, 13, 0.5);
         font-weight: bold;
@@ -89,6 +89,31 @@ image_source: "/assets/images/"
         right: 0px;
     }
 
+    #gallpips {
+        position: relative;
+        bottom: 50px;
+        left: 50%;
+        transform: translateX(-50%);
+        padding: 10px;
+        background-color: rgb(6, 0, 13, 0.5);
+        text-align: center;
+        line-height: 0px;
+        border-radius: 15px;
+        user-select: none;
+        display: inline-block;
+    }
+
+    .pip {
+        background: 0 0 no-repeat;
+        opacity: 0.5;
+        background-position: center;
+        display: inline-block;
+        margin: auto;
+        width: 10px;
+        height: 10px;
+        border-radius: 5px;
+    }
+
     .caption {
         text-align: center;
         font-size: small;
@@ -105,7 +130,9 @@ image_source: "/assets/images/"
     <button id="prevslide" onclick="changeSlide(-1)">&lt;</button>
     <button id="nextslide" onclick="changeSlide(1)">&gt;</button>
     <div id="gallpips">
-        ...
+        {% for i in (1..page.images) %}
+        <span class="pip"></span>
+        {% endfor %}
     </div>
 </div>
 <script>
@@ -116,6 +143,7 @@ image_source: "/assets/images/"
     }
     function showSlide(n) {
         var slides = document.getElementsByClassName("slide");
+        var pips = document.getElementsByClassName("pip");
         if (n > slides.length) {
             slideIndex = 1
         }
@@ -124,8 +152,14 @@ image_source: "/assets/images/"
         }
         for (var i = 0; i < slides.length; i++) {
             slides[i].style.display = "none";
+            pips[i].style.backgroundImage = "url(\"/assets/images/pip.png\")";
+            pips[i].style.opacity = 0.5;
+            pips[i].style.boxShadow = "none";
         }
         slides[slideIndex-1].style.display = "block";
+        pips[slideIndex-1].style.backgroundImage = "url(\"/assets/images/pipcurrent.png\")";
+        pips[slideIndex-1].style.opacity = 1;
+        pips[slideIndex-1].style.boxShadow = "0px 0px 5px 0px rgba(255, 216, 70, 0.75)";
     }
 </script>
 
