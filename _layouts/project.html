@@ -53,6 +53,7 @@ image_source: "/assets/images/"
         border: 3px solid rgb(255, 216, 70);
         border-radius: 5px;
         box-shadow: 0px 0px 5px 0px rgba(255, 216, 70, 0.75);
+        background-color: rgb(6, 0, 13);
     }
 
     .slide {
@@ -70,7 +71,8 @@ image_source: "/assets/images/"
         left: 0px;
         height: 100%;
         padding: 0 16px 0 16px;
-        color: rgb(6, 0, 13, 0.5);
+        color: rgb(255, 216, 70);
+        text-shadow: 0 0 5px rgba(255, 215, 70, 0.75);
         text-shadow: none;
         background-color: rgb(6, 0, 13, 0.5);
         font-weight: bold;
@@ -80,13 +82,22 @@ image_source: "/assets/images/"
     }
 
     #nextslide:hover, #prevslide:hover {
-        color: rgb(255, 216, 70);
-        text-shadow: 0 0 5px rgba(255, 215, 70, 0.75);
+        color: rgb(249, 255, 219);
+        text-shadow: 0 0 5px rgba(249, 255, 219, 0.75);
     }
 
     #nextslide {
         left: auto;
         right: 0px;
+    }
+
+    #gallui {
+        opacity: 0;
+        transition: 0.5s;
+    }
+
+    #gallery:hover #gallui {
+        opacity: 1;
     }
 
     #gallpips {
@@ -127,12 +138,14 @@ image_source: "/assets/images/"
     {% for i in (1..page.images) %}
     <img class="slide" src="/assets/images/{{page.title}}/gall{{i}}.png">
     {% endfor %}
+    <div id="gallui">
     <button id="prevslide" onclick="changeSlide(-1)">&lt;</button>
     <button id="nextslide" onclick="changeSlide(1)">&gt;</button>
     <div id="gallpips">
         {% for i in (1..page.images) %}
         <span class="pip"></span>
         {% endfor %}
+    </div>
     </div>
 </div>
 <script>
