@@ -139,6 +139,7 @@ image_source: "/assets/images/"
     <img class="slide" src="/assets/images/{{page.title}}/gall{{i}}.png">
     {% endfor %}
     <div id="gallui">
+    {% if page.images > 1 %}
     <button id="prevslide" onclick="changeSlide(-1)">&lt;</button>
     <button id="nextslide" onclick="changeSlide(1)">&gt;</button>
     <div id="gallpips">
@@ -146,8 +147,10 @@ image_source: "/assets/images/"
         <span class="pip"></span>
         {% endfor %}
     </div>
+    {% endif %}
     </div>
 </div>
+{% if page.images > 1 %}
 <script>
     var slideIndex = 1;
     showSlide(slideIndex);
@@ -175,6 +178,7 @@ image_source: "/assets/images/"
         pips[slideIndex-1].style.boxShadow = "0px 0px 5px 0px rgba(255, 216, 70, 0.75)";
     }
 </script>
+{% endif %}
 
 {% if page.links and page.link_names %}
 <p id="project-links">Links: 
