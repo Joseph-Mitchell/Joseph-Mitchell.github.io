@@ -2,7 +2,7 @@
 title: "Object Oriented Software Development"
 layout: project
 date: "Oct 2019"
-tags: ["C#", "WPF", "Coursework"]
+tags: ["C#", "WPF", "XML", "Coursework"]
 ---
 
 <h2>Summary</h2>
@@ -13,11 +13,134 @@ tags: ["C#", "WPF", "Coursework"]
 </p>
 <p>
     These learning points were:
+    <ul>
     <li>Applications Architecture</li>
     <li>Persistance and Serialization</li>
     <li>Automated Testing</li>
     <li>Linq Queries</li>
     <li>Software Design Patterns</li>
+    </ul>
 </p>
 <h2>Coursework 1</h2>
+<p>
+    The first coursework was aimed at testing our knowledge of basic WPF functions.
+    The required deliverable was a mock-up presentation layer form for a system that takes information for a student (such as their name, the course they are studying, their e-mail etc.).<br>
+    The inputs of this form are be passed through a validation method which checks each field for errors (e.g. no @ symbol in e-mail, empty fields, unselected dropdown boxes).
+    If an error is found, a pop-up box is opened describing the issue. If no errors are found a pop up box shows a validation message.
+</p>
+<p>
+    Below is a showcase of the form and pop-up layouts along with relevant code snippets.
+</p>
+<div class="grid" style="grid-template-columns: 50% 50%;">
+    <div>
+        <img src="{{layout.image_source}}{{page.title}}/1.png">
+        <p class="caption">Main Form Layout</p>
+    </div>
+    <div style="max-height: 100%">
+        <img style="width:60%" src="{{layout.image_source}}{{page.title}}/2.png">
+        <p class="caption">Error Pop-Up</p>
+        <br>
+        <br>
+        <br>
+        <img style="width:60%" src="{{layout.image_source}}{{page.title}}/3.png">
+        <p class="caption">Validation Pop-Up</p>
+    </div>
+</div>
+<p class="caption">Validate Function</p>
+{% highlight cs %}
+//Called when the Validate button is pressed
+//Checks each field for errors
+private bool Validate()
+{
+    error = "";
+
+    //Error if either name field is blank
+    if (string.IsNullOrWhiteSpace(txtbx_firstName.Text))
+    {
+        error = "First name is blank";
+        return false;
+    }
+    if (string.IsNullOrWhiteSpace(txtbx_surname.Text))
+    {
+        error = "Surname is blank";
+        return false;
+    }
+
+    //Returns false if input to age field cannot convert to an integer
+    try
+    {
+        if(int.Parse(txtbx_age.Text) < 16 || int.Parse(txtbx_age.Text) > 101)
+        {
+            error = "Age is out of range";
+            return false;
+        }
+    }
+    catch
+    {
+        error = "Age is invalid";
+        return false;
+    }
+
+    //Check for blank text fields
+    if (cmbobx_course.SelectedItem == null)
+    {
+        error = "Course selection is blank";
+        return false;
+    }
+    if (string.IsNullOrWhiteSpace(txtbx_address1.Text))
+    {
+        error = "Address is blank";
+        return false;
+    }
+    if (string.IsNullOrWhiteSpace(txtbx_city.Text))
+    {
+        error = "City is blank";
+        return false;
+    }
+    if (string.IsNullOrWhiteSpace(txtbx_postcode.Text))
+    {
+        error = "Postcode is blank";
+        return false;
+    }
+
+    if (string.IsNullOrWhiteSpace(txtbx_email.Text))
+    {
+        error = "Email is blank";
+        return false;
+    }
+    else
+    {
+        //If text does not contain '@', IndexOf returns -1
+        if (txtbx_email.Text.IndexOf('@') == -1)
+        {
+            error = "Email is invalid";
+            return false;
+        }
+
+        //Assures that the first and last character of the email field are letters/digits
+        if (!char.IsLetterOrDigit(txtbx_email.Text, 0))
+        {
+            error = "Email is invalid";
+            return false;
+        }
+        if (!char.IsLetterOrDigit(txtbx_email.Text, txtbx_email.Text.Length - 1))
+        {
+            error = "Email is invalid";
+            return false;
+        }
+    }
+
+    //Error if International Student box is checked but no country is chosen
+    if ((bool)chkbx_international.IsChecked)
+    {
+        if (cmbobx_country.SelectedItem == null)
+        {
+            error = "Country selection is blank";
+            return false;
+        }
+    }
+
+    return true;
+}
+{% endhighlight %}
 <h2>Coursework 2</h2>
