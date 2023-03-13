@@ -86,8 +86,9 @@ title: "Home"
     {% endif %}
     <h2 class="proj-title">{{project.title}}</h2>
     <p class="date">{{project.date | date: "%b %Y"}}</p>
-    {% for tag in project.tags %}
-    <div class="tag">{{project.tags[forloop.index0]}}</div>
+    {% assign tags = project.tags | sort %}
+    {% for tag in tags %}
+    <div class="tag">{{tags[forloop.index0]}}</div>
     {% endfor %}
   </a>
   {% endfor %}
