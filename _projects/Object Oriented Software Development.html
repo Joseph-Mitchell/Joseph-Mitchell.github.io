@@ -33,7 +33,7 @@ tags: ["C#", "WPF", "XML"]
 </p>
 <div class="grid" style="grid-template-columns: 50% 50%;">
     <div>
-        <img src="{{layout.image_source}}{{page.title}}/1.png">
+        <img style="width: 75%" src="{{layout.image_source}}{{page.title}}/1.png">
         <p class="caption">Main Form Layout</p>
     </div>
     <div style="max-height: 100%">
@@ -109,39 +109,215 @@ private bool Validate()
         error = "Email is blank";
         return false;
     }
-    else
+    //If text does not contain '@', IndexOf returns -1
+    if (txtbx_email.Text.IndexOf('@') == -1)
     {
-        //If text does not contain '@', IndexOf returns -1
-        if (txtbx_email.Text.IndexOf('@') == -1)
-        {
-            error = "Email is invalid";
-            return false;
-        }
+        error = "Email is invalid";
+        return false;
+    }
 
-        //Assures that the first and last character of the email field are letters/digits
-        if (!char.IsLetterOrDigit(txtbx_email.Text, 0))
-        {
-            error = "Email is invalid";
-            return false;
-        }
-        if (!char.IsLetterOrDigit(txtbx_email.Text, txtbx_email.Text.Length - 1))
-        {
-            error = "Email is invalid";
-            return false;
-        }
+    //Assures that the first and last character of the email field are letters/digits
+    if (!char.IsLetterOrDigit(txtbx_email.Text, 0))
+    {
+        error = "Email is invalid";
+        return false;
+    }
+    if (!char.IsLetterOrDigit(txtbx_email.Text, txtbx_email.Text.Length - 1))
+    {
+        error = "Email is invalid";
+        return false;
     }
 
     //Error if International Student box is checked but no country is chosen
-    if ((bool)chkbx_international.IsChecked)
+    if ((bool)chkbx_international.IsChecked && cmbobx_country.SelectedItem == null)
     {
-        if (cmbobx_country.SelectedItem == null)
-        {
-            error = "Country selection is blank";
-            return false;
-        }
+        error = "Country selection is blank";
+        return false;
     }
 
     return true;
 }
 {% endhighlight %}
 <h2>Coursework 2</h2>
+<p>
+    For the second coursework we were tasked with creating a mock-up of a system made for an organization providing support services to elderly patients. 
+    This system was required to handle the information of staff and clients and to provide framework for the scheduling of client visitations.<br>
+    We were provided with a premade "presentation layer" consisting of a WPF form layout, along with a "business layer" with empty methods to be called by the presentation layer once they had been completed.<br>
+</p>
+<p>
+    Below is the premade form layout given for the coursework.
+</p>
+<img src="{{layout.image_source}}{{page.title}}/4.png">
+<p>
+    The functionalities of each button are as follows:
+    <ul>
+        <li><mark>Add Staff:</mark> Adds a number of staff members to a list in the business layer by calling the addStaff method, before printing the contents of the list with the getStaffList method.</li>
+        <li><mark>Add Clients:</mark> Similar functionality to Add Staff, but using the addClient and getClientList functions respectively.</li>
+        <li>
+            <mark>Add Visits:</mark> Again, similar to the above buttons, with addVisit and getVisitList respectively, with the exception of using try-catch statements for each visit as the
+            addVisit method is intended to throw exceptions if incorrectly formatted data is given or if the new visit clashes with pre-existing staff or client schedules.
+        </li>
+        <li><mark>Save:</mark> Saves held data to a file.</li>
+        <li><mark>Clear:</mark> Clears held data.</li>
+        <li><mark>Load:</mark> Loads held data from a file.</li>
+    </ul>
+</p>
+<p>
+    The first task for creating the system was to design and impliment the Staff, Client and Visit classes. Below is a class diagram depicting their relationships.
+</p>
+<img style="width:100%" src="{{layout.image_source}}{{page.title}}/5.png">
+<p>
+    Each class is held in a new "data layer" as the methods in each class only exist to expose data to the business layer.
+</p>
+<p>
+    The data layer facade holds lists for people and visits and contains methods for: creating new clients, staff and visits; saving, loading and clearing data; and a method for creating a new ID for each visit.<br>
+    Each of the classes holds their respective data and has a ToString and Display method.<br>
+    The Staff and Client classes inherit from a new People class, as they shared a number of common attributes.<br>
+    The Client class in this implimentation is simply an empty class to allow the program to explicitly differentiate clients from staff 
+    (although in retrospect this could likely have been done more simply with the use of an enumerator or other identifying variable).<br>
+    Finally a new Location class was created to store longitude and latitude location data together.
+</p>
+<p>
+    The methods in each class are self explanitory, however some of the methods in the facade require further context.<br>
+    The NewStaff, NewClient and NewVisit methods take data as simple datatypes and calls the constructors of the respective class. 
+    This can be done directly for the most part, but some data is parsed from strings to enumerators or DateTime.<br>
+    These methods also have a number of exception throwers if data is incorrectly formatted or clashes with existing data.
+</p>
+<p>Below is the NewStaff method as an example.</p>
+
+{% highlight cs %}
+public bool NewStaff(string c, int i, string f, string s, string a1, string a2, double la, double lo)
+{
+    StaffCategory staffCategory;
+
+    foreach (Staff j in people.OfType<Staff>())
+    {
+        if (j.ID == i)
+        {
+            throw new Exception("Error - The id given was already assigned to a staff member in new staff (id " + i + " fname " + f + " sname " + s + ")");
+        }
+    }
+
+    switch (c)
+    {
+        case "General Practitioner":
+            staffCategory = StaffCategory.GeneralPractitioner;
+            break;
+        case "Community Nurse":
+            staffCategory = StaffCategory.CommunityNurse;
+            break;
+        case "Social Worker":
+            staffCategory = StaffCategory.SocialWorker;
+            break;
+        case "Care Worker":
+            staffCategory = StaffCategory.CareWorker;
+            break;
+        default:
+            throw new Exception("Error - The category given did not exist in new staff (id " + i + " fname " + f + " sname " + s + ")");
+    }
+
+    people.Add(new Staff(i, staffCategory, f, s, a1, a2, lo, la));
+
+    return true;
+}
+{% endhighlight %}
+<p>
+    The clear method simply clears the people and visits lists, however the save and load methods are more complex.<br>
+    The save method uses StreamWriter to save each list to corrosponding csv files, with a separate file for staff and clients. The full method is shown below.
+</p>
+
+{% highlight cs %}
+public void Save()
+{
+    using (StreamWriter file = new StreamWriter(SAVEPATH + "staff.csv"))
+    {
+        file.AutoFlush = true;
+        foreach (Staff s in people.OfType<Staff>())
+        {
+            file.WriteLine(s.ToString());
+        }
+    }
+
+    using (StreamWriter file = new StreamWriter(SAVEPATH + "clients.csv"))
+    {
+        file.AutoFlush = true;
+        foreach (Client c in people.OfType<Client>())
+        {
+            file.WriteLine(c.ToString());
+        }
+    }
+
+    using (StreamWriter file = new StreamWriter(SAVEPATH + "visits.csv"))
+    {
+        file.AutoFlush = true;
+        foreach (Visit v in visits)
+        {
+            file.WriteLine(v.ToString());
+        }
+    }
+}
+{% endhighlight %}
+<p>
+    The load method is slightly more convoluted, needing to parse data in the save file and using try-catch statements in case of parsing failure. 
+    The try-catch statement for the staff list is shown below.
+</p>
+
+{% highlight cs %}
+try
+{
+    using (StreamReader file = new StreamReader(SAVEPATH + "staff.csv"))
+    {
+        for (string line = file.ReadLine(); line != null; line = file.ReadLine())
+        {
+            string[] staffAttribs = line.Split(',');
+
+            int id = int.Parse(staffAttribs[0]);
+            string firstName = staffAttribs[1];
+            string surname = staffAttribs[2];
+            string address1 = staffAttribs[3];
+            string address2 = staffAttribs[4];
+            double longitude = double.Parse(staffAttribs[5]);
+            double latitude = double.Parse(staffAttribs[6]);
+            StaffCategory category = (StaffCategory)Enum.Parse(typeof(StaffCategory), staffAttribs[7]);
+
+            people.Add(new Staff(id, category, firstName, surname, address1, address2, longitude, latitude));
+        }
+    }
+}
+catch
+{
+    return false;
+}
+{% endhighlight %}
+<p>
+    The final task given for this coursework was to create a number of unit tests for a class in the system.
+    This was done using a new test project in visual studio which was aimed to test the methods in the DataSingletonFacade class.<br>
+    An example of one of these unit tests is given below.
+</p>
+{% highlight cs %}
+[TestMethod]
+public void NewStaff_ExistingID_ThrowsException()
+{
+    string category = "General Practitioner";
+    int id = 12;
+    string firstName = "John";
+    string surname = "Smith";
+    string address1 = "17 Laine Lane";
+    string address2 = "Taunton";
+    double latitude = 12.345678;
+    double longitude = 87.654321;
+
+    DataSingletonFacade.Instance.NewStaff(category, id, firstName, surname, address1, address2, latitude, longitude);
+
+    try
+    {
+        DataSingletonFacade.Instance.NewStaff(category, id, firstName, surname, address1, address2, latitude, longitude);
+    }
+    catch (Exception e)
+    {
+        StringAssert.Contains(e.Message, "The id given was already assigned to a staff member", "Unexpected Exception was thrown");
+        return;
+    }
+    Assert.Fail("No exception was thrown");
+}
+{% endhighlight %}
