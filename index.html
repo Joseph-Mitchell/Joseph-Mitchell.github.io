@@ -17,7 +17,55 @@ layout: default-noheader
         transform: translate(-50%, -50%);
         text-shadow: 0 0 10px rgba(255, 215, 70, 0.75), 4px 4px rgb(10, 0, 20), -4px 4px rgb(10, 0, 20), 4px -4px rgb(10, 0, 20), -4px -4px rgb(10, 0, 20);
     }
+
+    #hiddenreveal {
+        width: 80%;
+        margin: auto;
+        position: relative;
+        border: 3px solid rgb(255, 216, 70);
+        border-radius: 50px;
+        box-shadow: 0px 0px 5px 0px rgba(255, 216, 70, 0.75);
+        overflow: hidden;
+    }
+
+    #hiddenreveal p {
+        position: relative;
+        text-align: center;
+        margin: 5% 10% 5% 10%;
+        z-index: 0;
+    }
+
+    #revealbutton {
+        cursor: pointer;
+        margin: auto;
+        position: absolute;
+        top: 0%;
+        left: 0%;
+        width: 100%;
+    }
 </style>
+
+<script>
+    function reveal() {
+        let element = document.getElementById("revealbutton");
+        element.onclick = null;
+        element.style.cursor = "auto";
+        let opacity = 1.0;
+        let id = setInterval(update, 50);
+        function update() {
+            if (opacity <= 0)
+            {
+                element.style.display = "none";
+                clearInterval(id);
+            }
+            else
+            {
+                opacity -= 0.05;
+                element.style.opacity = opacity;
+            }
+        }
+    }
+</script>
 
 <div style="position: relative; height: 100%;">
     <img src="assets/images/titlebkg.png" style="margin: auto;">
@@ -35,4 +83,11 @@ layout: default-noheader
         Currently I am looking to join a development team where I can utilize the skills I have learned from my education in the real world.<br>
         I also occasionally spend time working on my own personal projects. You can see what I am currently working on in the section below.
     </p>
+    <h1>Currently I'm Working On...</h1>
+    <div id="hiddenreveal">
+        <p>
+            This Portfolio! Once I'm done designing the website and adding old projects this section will give details about what I'm doing with my free time.
+        </p>
+        <img id="revealbutton" onclick="reveal()" src="assets/images/smoke.gif">
+    </div>
 </div>
