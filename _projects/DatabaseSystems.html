@@ -1,0 +1,270 @@
+---
+title: "Database Systems"
+layout: project
+date: "Oct 2019"
+tags: ["SQL"]
+---
+
+<h2>Summary</h2>
+<p>
+    This module taught the basics of SQL functionality and Database structure, as well as some more advanced subjects such as database administration and security. 
+    This module included one coursework project, which will be the focus of this page.
+</p>
+<h2>Project Overview</h2>
+<p>
+    The database for an imagined haulage company was given to us and we were tasked with performing a number of database functions using it. A diagram for the initial database is shown below.
+</p>
+<img src="{{layout.image_source}}{{page.title}}/1.png">
+<p>
+    There were two main tasks within the project, the first requiring a number of SELECT statements to be written, 
+    and the second requiring specific alterations to the existing database.
+</p>
+<h2>Section 1</h2>
+<p>
+    Because this section required the answering of multiple similar questions, I will only showcase one of them.
+</p>
+<h3>Task</h3>
+<p>
+    Drivers who work for more than 22 days in a month are paid overtime for the extra days. 
+    A list was to be made showing which drivers qualified for bonus pay, along with the month they worked in, the number of days they worked for, and the number of days they would receive a bonus for.<br>
+    Below is the expected output for the SELECT statement.
+</p>
+<img src="{{layout.image_source}}{{page.title}}/2.png">
+<br>
+<h3>Solution</h3>
+{% highlight sql %} 
+SELECT MONTHNAME(departure_date) AS Month, CONCAT(first_name, ' ', last_name) AS Name, 
+	SUM(DATEDIFF(return_date, departure_date)) AS Days, 
+        SUM(DATEDIFF(return_date, departure_date)) - 22 AS Bonus_days 
+FROM driver
+	JOIN trip ON driver.employee_no = trip.employee_no
+GROUP BY Month, Name
+HAVING Days > 22
+ORDER BY MONTH(departure_date), Days DESC;
+{% endhighlight %}
+<h4>MONTHNAME(departure_date) AS Month</h4>
+<p>
+    For the first column, the departure_date from the trip table is selected, formatted as the months full name with the MONTHNAME function.
+</p>
+<h4>CONCAT(first_name, ' ', last_name) AS Name</h4>
+<p>
+    The second column takes the first_name and last_name variables from the driver table, and formats them to be more readable using the CONCAT function to merge them into the same entry.
+</p>
+<h4>SUM(DATEDIFF(return_date, departure_date)) AS Days</h4>
+<p>
+    Column three uses the DATEDIFF function to determine the difference in days between the return_date and departure_date variables from the trip table. 
+    The days are then summed together to find the total days by a driver in a month.
+</p>
+<h4>SUM(DATEDIFF(return_date, departure_date)) - 22 AS Bonus_days</h4>
+<p>
+    The final column does the same as previous, but removes 22 from the total to determine the number of bonus days the employee should receive payment for.
+</p>
+<h4>JOIN trip ON driver.employee_no = trip.employee_no</h4>
+<p>
+    The employee_no variable from the trip and driver tables is used to join the two tables for this transaction because as is shown in the diagram, 
+    the trip tables employee_no is the foreign key associated with the primary key of the driver table.
+</p>
+<h4>GROUP BY Month, Name</h4>
+<p>
+    The entries are then grouped first by month, and then by name, so that each entry where the month and name are the same are merged together. 
+    This works in conjunction with the SUM function in the third and fourth columns to add the total days together.    
+</p>
+<h4>HAVING Days > 22</h4>
+<p>
+    This line makes sure only relevant entries - those in which an employee who has worked more than 22 days and requires bonus pay - are shown.
+</p>
+<h4>ORDER BY MONTH(departure_date), Days DESC</h4>
+<p>
+    Finally, the table is ordered first by month, and then by descending number of days worked.
+</p>
+<h2>Section 2</h2>
+<h3>Task</h3>
+<p>
+    The haulage database must be extended to include another category of staff: the customer account manager.<br>
+    Each customer is assigned a CAM and because CAMs can change over time, a specific CAM must be assigned to each trip.<br>
+    Additionally, details of customer queries made to their CAM should be stored in the database, along with responses from the CAM, and the ability to mark queries as closed once resolved.
+</p>
+<h3>Solution</h3>
+<img style="width: 100%" src="{{layout.image_source}}{{page.title}}/3.png">
+<p>
+    Above is the redesigned database diagram, showing the newly added tables cam, enquiry, and cam_response on the right side. <br>
+    Below is the full sql document used to alter the database, populate tables with new data, and query the database for new data.
+</p>
+{% highlight sql %} 
+-- Table Creation
+CREATE TABLE cam(
+	employee_no VARCHAR(7) PRIMARY KEY,
+	first_name VARCHAR(20),
+	last_name VARCHAR(20),
+	ni_no VARCHAR(13),
+	telephone VARCHAR(20),
+	mobile VARCHAR(20)
+);
+{{' '}}
+CREATE TABLE enquiry(
+	enquiry_id INT PRIMARY KEY,
+	customer_reference INT NOT NULL,
+	cam_employee_no VARCHAR(7) NOT NULL,
+	enquiry_type VARCHAR(20),
+	date_created DATE,
+	enquiry_content VARCHAR(255),
+	closed VARCHAR(1),
+	FOREIGN KEY (customer_reference)
+	REFERENCES customer(reference),
+	FOREIGN KEY (cam_employee_no)
+	REFERENCES cam(employee_no)
+);
+{{' '}}
+CREATE TABLE cam_response(
+	response_id INT PRIMARY KEY,
+	enquiry_id INT,
+	date_created DATE,
+	response_content VARCHAR(255),
+	FOREIGN KEY (enquiry_id) 
+	REFERENCES enquiry(enquiry_id)
+);
+{{' '}}
+-- Table Alteration
+{{' '}}
+ALTER TABLE customer
+	ADD cam_employee_no VARCHAR(7);
+{{' '}}
+ALTER TABLE customer
+	ADD CONSTRAINT customer_ibfk_1 FOREIGN KEY (cam_employee_no) REFERENCES cam(employee_no);
+{{' '}}
+ALTER TABLE trip
+	ADD cam_employee_no VARCHAR(7);
+{{' '}}
+ALTER TABLE trip
+	ADD CONSTRAINT trip_ibfk_4 FOREIGN KEY (cam_employee_no) REFERENCES cam(employee_no);	
+{{' '}}
+-- Row Insertion
+{{' '}}
+INSERT INTO cam(employee_no, first_name, last_name, ni_no, telephone, mobile)
+	VALUES
+	("0123673", "John", "Smith", "AA123456B", "01314 960160", "07700 900856"),
+	("0125153", "James", "McSmith", "BB654321C", "01314 960658", "07700 900945"),
+	("0132361", "Joel", "MacSmith", "CC321654C", "01314 960836", "07700 900764");
+{{' '}}
+INSERT INTO enquiry(enquiry_id, customer_reference, cam_employee_no, enquiry_type, 
+                    date_created, enquiry_content, closed)
+	VALUES
+	(1, 300, "0123673", "Type1", "2013-10-20", "Hello", "N"),
+	(2, 299, "0125153", "Type4", "2013-11-05", "Hi", "Y"),
+	(3, 300, "0123673", "Type1", "2013-12-15", "Hello?", "N"),
+	(4, 298, "0132361", "Type3", "2013-12-27", ">:(", "Y"),
+	(5, 300, "0123673", "Type3", "2014-02-22", "Answer Me!", "Y");
+{{' '}}
+INSERT INTO cam_response(response_id, enquiry_id, date_created, response_content)
+	VALUES
+	(1, 2, "2013-11-12", "Yes, Hello"),
+	(2, 4, "2014-01-03", ":("),
+	(3, 5, "2014-02-23", "No :)");
+{{' '}}
+-- Row Updating
+{{' '}}
+UPDATE customer
+	SET cam_employee_no = "0123673"
+WHERE reference = 300;
+{{' '}}
+UPDATE customer
+	SET cam_employee_no = "0125153"
+WHERE reference = 299;
+{{' '}}
+UPDATE customer
+	SET cam_employee_no = "0132361"
+WHERE reference = 298;
+{{' '}}
+UPDATE trip
+JOIN manifest ON trip.trip_id = manifest.trip_id 
+	SET cam_employee_no = "0123673"
+WHERE manifest.delivery_customer_ref = 300;
+{{' '}}
+UPDATE trip
+JOIN manifest ON trip.trip_id = manifest.trip_id 
+	SET cam_employee_no = "0125153"
+WHERE manifest.delivery_customer_ref = 299;
+{{' '}}
+UPDATE trip
+JOIN manifest ON trip.trip_id = manifest.trip_id 
+	SET cam_employee_no = "0132361"
+WHERE manifest.delivery_customer_ref = 298;
+{{' '}}
+-- Queries
+{{' '}}
+SELECT * FROM cam;
+{{' '}}
+SELECT reference, contact_fname, contact_sname, cam_employee_no AS 'Cam Employee Number', 
+	first_name AS 'Cam First Name', last_name AS 'Cam Last Name'
+FROM customer JOIN cam ON cam_employee_no = employee_no;
+{{' '}}
+SELECT trip.trip_id, trip.cam_employee_no AS 'Cam Employee Number',
+	cam.first_name AS 'Cam First Name', cam.last_name AS 'Cam Last Name'
+FROM trip JOIN cam ON trip.cam_employee_no = cam.employee_no;
+{{' '}}
+SELECT * FROM enquiry;
+{{' '}}
+SELECT * FROM cam_response;
+{% endhighlight %}
+<h4>Table Creation</h4>
+<p>
+    The cam table was created with the employee_no variable as its primary key.<br>
+    The enquiry table was created with the enquiry_id as its primary key. It also included two foreign keys these being 
+    customer_reference, as a reference to the reference variable in the customer table, and cam_employee_no, as a reference to the employee_no variable in the cam table.<br>
+    Finally the cam_response table was created with the response_id variable as its primary key. It also included one foreign key, this being enquiry_id, as a reference to the enquiry_id variable in the enquiry table.
+</p>
+<h4>Table Alteration</h4>
+<p>
+    The customer table is altered to include the cam_employee_no variable, which is then constrained as a foreign key, being a reference to the employee_no variable in the cam table.<br>
+    The same altereation is made to the trip table.
+</p>
+<h4>Row Insertion</h4>
+<p>
+    A number of example entries are added into the newly added tables to populate them with data.
+</p>
+<h4>Row Updating</h4>
+<p>
+    A number of entries in the customer table are updated to have a CAM associated with them.
+    The corresponding entries in the trip table are updated to have the same CAM associated. 
+    The manifest table is joined during these transactions in order to ascertain the customer associated with each trip.
+</p>
+<h4>Queries</h4>
+<p>A number of queries are made to show the data now stored within the database. Below are the queries along with their outputs.</p>
+<div style="text-align: center;">
+    <div style="display: inline-block; text-align: left;">
+        <p style="text-align: left;"><mark>SELECT * FROM cam;</mark></p>
+    </div>
+</div>
+<img src="{{layout.image_source}}{{page.title}}/4.png">
+<div style="text-align: center;">
+    <div style="display: inline-block; text-align: left;">
+        <p style="text-align: left;"><mark>
+            SELECT reference, contact_fname, contact_sname, cam_employee_no AS 'Cam Employee Number',<br>
+            &nbsp&nbsp&nbsp&nbspfirst_name AS 'Cam First Name', last_name AS 'Cam Last Name'<br>
+            FROM customer JOIN cam ON cam_employee_no = employee_no;
+        </mark></p>
+    </div>
+</div>
+<img src="{{layout.image_source}}{{page.title}}/5.png">
+<div style="text-align: center;">
+    <div style="display: inline-block; text-align: left;">
+        <p style="text-align: left;"><mark>
+            SELECT trip.trip_id, trip.cam_employee_no AS 'Cam Employee Number',<br>
+            &nbsp&nbsp&nbsp&nbspcam.first_name AS 'Cam First Name', cam.last_name AS 'Cam Last Name'<br>
+            FROM trip JOIN cam ON trip.cam_employee_no = cam.employee_no;
+        </mark></p>
+    </div>
+</div>
+<img src="{{layout.image_source}}{{page.title}}/6.png">
+<div style="text-align: center;">
+    <div style="display: inline-block; text-align: left;">
+        <p style="text-align: left;"><mark>SELECT * FROM enquiry;</mark></p>
+    </div>
+</div>
+<img src="{{layout.image_source}}{{page.title}}/7.png">
+<div style="text-align: center;">
+    <div style="display: inline-block; text-align: left;">
+        <p style="text-align: left;"><mark>SELECT * FROM cam_response;</mark></p>
+    </div>
+</div>
+<img src="{{layout.image_source}}{{page.title}}/8.png">
