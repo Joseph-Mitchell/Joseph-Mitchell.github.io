@@ -32,7 +32,7 @@ tags: ["SQL", "University"]
 <img src="{{layout.image_source}}{{page.title}}/2.png">
 <br>
 <h3>Solution</h3>
-{% highlight sql %} 
+{% highlight sql %}
 SELECT MONTHNAME(departure_date) AS Month, CONCAT(first_name, ' ', last_name) AS Name, 
 	SUM(DATEDIFF(return_date, departure_date)) AS Days, 
         SUM(DATEDIFF(return_date, departure_date)) - 22 AS Bonus_days 
@@ -90,7 +90,7 @@ ORDER BY MONTH(departure_date), Days DESC;
     Above is the redesigned database diagram, showing the newly added tables cam, enquiry, and cam_response on the right side. <br>
     Below is the full sql document used to alter the database, populate tables with new data, and query the database for new data.
 </p>
-{% highlight sql %} 
+{% highlight sql %}
 -- Table Creation
 CREATE TABLE cam(
 	employee_no VARCHAR(7) PRIMARY KEY,
