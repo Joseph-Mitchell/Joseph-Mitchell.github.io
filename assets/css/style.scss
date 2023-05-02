@@ -76,10 +76,28 @@ a:active {
     text-shadow: 0 0 5px rgba(142, 124, 8, 0.75);
 }
 
+table {
+    margin: 0px;
+}
+
 pre:has(code) {
     background: rgb(6,0,13);
     color: white;
     border: 1px solid rgb(255, 216, 70);
+}
+
+td.code > pre{
+    background: rgb(6,0,13);
+    border: unset;
+    color: white;
+    padding: 0px 10px 0px 0px;
+}
+
+pre.lineno{
+    background: rgb(6,0,13);
+    border: unset;
+    color: rgba(255, 255, 255, 0.5);
+    padding: 0px 0px 0px 10px;
 }
 
 hr {
