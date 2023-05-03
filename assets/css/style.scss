@@ -84,24 +84,54 @@ table {
     margin: 0px;
 }
 
-pre:has(code) {
+/* code snippets */
+
+/* code snippet frame */
+pre:has(code) { 
     background: rgb(6,0,13);
     color: white;
     border: 1px solid rgb(255, 216, 70);
 }
 
-td.code > pre{
+/* code with line nos */
+td.code > pre {
     background: rgb(6,0,13);
     border: unset;
     color: white;
     padding: 0px 10px 0px 0px;
 }
 
-pre.lineno{
+/* line nos */
+pre.lineno {
     background: rgb(6,0,13);
     border: unset;
-    color: rgba(255, 255, 255, 0.5);
+    color: rgba(255, 255, 255, 0.3);
     padding: 0px 0px 0px 10px;
+}
+
+/* strings */
+.highlight .s, .highlight .sb, .highlight .sc, .highlight .sd, .highlight .s2, .highlight .se, .highlight .sh, .highlight .si, .highlight .sx, .highlight .sr, .highlight .s1, .highlight .ss {
+    color: #CE9178;
+}
+
+/* comments */
+.highlight .c {
+    color: #6A9955;
+}
+
+/* bulletins and functions */
+.highlight .nb, .highlight .nf {
+    color: #DCDCAA;
+}
+
+/* variables */
+.highlight .nv {
+    color: #9CDCFE;
+}
+
+/* types */
+.highlight .kt {
+    color: #4B9BD6;
 }
 
 hr {
