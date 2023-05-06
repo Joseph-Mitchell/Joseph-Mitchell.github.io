@@ -90,7 +90,7 @@ ORDER BY MONTH(departure_date), Days DESC;
     Above is the redesigned database diagram, showing the newly added tables cam, enquiry, and cam_response on the right side. <br>
     Below is the full sql document used to alter the database, populate tables with new data, and query the database for new data.
 </p>
-{% highlight sql %}
+{% highlight sql linenos %}
 -- Table Creation
 CREATE TABLE cam(
 	employee_no VARCHAR(7) PRIMARY KEY,
@@ -130,13 +130,15 @@ ALTER TABLE customer
 	ADD cam_employee_no VARCHAR(7);
 {{' '}}
 ALTER TABLE customer
-	ADD CONSTRAINT customer_ibfk_1 FOREIGN KEY (cam_employee_no) REFERENCES cam(employee_no);
+	ADD CONSTRAINT customer_ibfk_1 FOREIGN KEY (cam_employee_no) 
+        REFERENCES cam(employee_no);
 {{' '}}
 ALTER TABLE trip
 	ADD cam_employee_no VARCHAR(7);
 {{' '}}
 ALTER TABLE trip
-	ADD CONSTRAINT trip_ibfk_4 FOREIGN KEY (cam_employee_no) REFERENCES cam(employee_no);	
+	ADD CONSTRAINT trip_ibfk_4 FOREIGN KEY (cam_employee_no) 
+        REFERENCES cam(employee_no);	
 {{' '}}
 -- Row Insertion
 {{' '}}

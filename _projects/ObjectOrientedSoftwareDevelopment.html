@@ -48,7 +48,7 @@ tags: ["C#", "WPF", "XML", "University"]
 </div>
 <p class="caption">Validate Function</p>
 
-{% highlight cs %}
+{% highlight cs linenos %}
 //Called when the Validate button is pressed
 //Checks each field for errors
 private bool Validate()
@@ -185,7 +185,7 @@ private bool Validate()
 </p>
 <p>Below is the NewStaff method as an example.</p>
 
-{% highlight cs %}
+{% highlight cs linenos %}
 public bool NewStaff(string c, int i, string f, string s, string a1, string a2, double la, double lo)
 {
     StaffCategory staffCategory;
@@ -226,7 +226,7 @@ public bool NewStaff(string c, int i, string f, string s, string a1, string a2, 
     The save method uses StreamWriter to save each list to corrosponding csv files, with a separate file for staff and clients. The full method is shown below.
 </p>
 
-{% highlight cs %}
+{% highlight cs linenos %}
 public void Save()
 {
     using (StreamWriter file = new StreamWriter(SAVEPATH + "staff.csv"))
@@ -262,7 +262,7 @@ public void Save()
     The try-catch statement for the staff list is shown below.
 </p>
 
-{% highlight cs %}
+{% highlight cs linenos %}
 try
 {
     using (StreamReader file = new StreamReader(SAVEPATH + "staff.csv"))
@@ -294,7 +294,7 @@ catch
     This was done using a new test project in visual studio which was aimed to test the methods in the DataSingletonFacade class.<br>
     An example of one of these unit tests is given below.
 </p>
-{% highlight cs %}
+{% highlight cs linenos %}
 [TestMethod]
 public void NewStaff_ExistingID_ThrowsException()
 {
