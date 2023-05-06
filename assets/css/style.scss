@@ -99,10 +99,12 @@ img {
 /* code snippets */
 
 /* snippet frame */
-pre:has(code) { 
+.highlight > pre {
     background: rgb(6,0,13);
     color: white;
     border: 1px solid rgb(255, 216, 70);
+    box-shadow: 0px 0px 5px 0px rgba(255, 216, 70, 0.75),
+                inset 0px 0px 5px 0px rgba(255, 216, 70, 0.75);
 }
 
 /* code with line nos */

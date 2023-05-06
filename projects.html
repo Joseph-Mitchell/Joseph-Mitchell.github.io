@@ -17,7 +17,8 @@ title: "Projects"
   .grid a{
     border: 3px solid rgb(255, 216, 70);
     border-radius: 5px;
-    box-shadow: 0px 0px 5px 0px rgba(255, 216, 70, 0.75);
+    box-shadow: 0px 0px 5px 0px rgba(255, 216, 70, 0.75),
+                inset 0px 0px 5px 0px rgba(255, 216, 70, 0.75);
     margin: 10px;
     padding: 10px;
     text-align: center;
@@ -25,22 +26,26 @@ title: "Projects"
   }
   .grid a:hover{
     border-color: rgb(249, 255, 219);
-    box-shadow: 0px 0px 5px 0px rgba(249, 255, 219, 0.75);
+    box-shadow: 0px 0px 5px 0px rgba(249, 255, 219, 0.75),
+                inset 0px 0px 5px 0px rgba(249, 255, 219, 0.75);
   }
   .proj-title{
     margin: auto;
   }
   a:hover .proj-title{
     color: rgb(249, 255, 219);
-    text-shadow: 0 0 5px rgba(249, 255, 219, 0.75);
+    text-shadow: 0 0 5px rgba(249, 255, 219, 0.75),
+                inset 0px 0px 5px 0px rgba(249, 255, 219, 0.75);
   }
   .grid a:active{
     border-color: rgb(142, 124, 8);
-    box-shadow: 0px 0px 5px 0px rgba(142, 124, 8, 0.75);
+    box-shadow: 0px 0px 5px 0px rgba(142, 124, 8, 0.75), 
+                inset 0px 0px 3px 0px rgba(142, 124, 8, 0.75);
   }
   a:active .proj-title{
     color: rgb(142, 124, 8);
-    text-shadow: 0 0 5px rgba(142, 124, 8, 0.75);
+    text-shadow: 0 0 5px rgba(142, 124, 8, 0.75), 
+                inset 0px 0px 3px 0px rgba(142, 124, 8, 0.75);
   }
   .thumbnail{
     max-height: 160px;
@@ -49,16 +54,19 @@ title: "Projects"
     object-fit: contain;
     border: 1px solid rgb(255, 216, 70);
     border-radius: 3px;
-    box-shadow: 0px 0px 3px 0px rgba(255, 216, 70, 0.75);
+    box-shadow: 0px 0px 3px 0px rgba(255, 216, 70, 0.75),
+                inset 0px 0px 5px 0px rgba(255, 216, 70, 0.75);
   }
   a:hover .thumbnail{
     border-color: rgb(249, 255, 219);
-    box-shadow: 0px 0px 3px 0px rgba(249, 255, 219, 0.75);
+    box-shadow: 0px 0px 3px 0px rgba(249, 255, 219, 0.75),
+                inset 0px 0px 5px 0px rgba(249, 255, 219, 0.75);
   }
   a:active .thumbnail{
     filter: brightness(50%);
     border-color: rgb(142, 124, 8);
-    box-shadow: 0px 0px 3px 0px rgba(142, 124, 8, 0.75);
+    box-shadow: 0px 0px 3px 0px rgba(142, 124, 8, 0.75), 
+                inset 0px 0px 3px 0px rgba(142, 124, 8, 0.75);
   }
   .date {
     font-size: small;
