@@ -84,9 +84,21 @@ table {
     margin: 0px;
 }
 
+hr {
+    border-bottom: 1px dashed rgb(255, 216, 70);
+}
+
+th {
+    border-bottom: 1px dashed rgb(255, 216, 70);
+}
+
+img {
+    display: block;
+}
+
 /* code snippets */
 
-/* code snippet frame */
+/* snippet frame */
 pre:has(code) { 
     background: rgb(6,0,13);
     color: white;
@@ -111,39 +123,27 @@ pre.lineno {
 
 /* strings */
 .highlight .s, .highlight .sb, .highlight .sc, .highlight .sd, .highlight .s2, .highlight .se, .highlight .sh, .highlight .si, .highlight .sx, .highlight .sr, .highlight .s1, .highlight .ss {
-    color: #CE9178;
+    color: #d78d70;
 }
 
 /* comments */
 .highlight .c {
-    color: #6A9955;
+    color: #68a24e;
 }
 
 /* bulletins and functions */
 .highlight .nb, .highlight .nf {
-    color: #DCDCAA;
+    color: #e0e0a3;
 }
 
 /* variables */
 .highlight .nv {
-    color: #9CDCFE;
+    color: #8ad6ff;
 }
 
 /* types */
 .highlight .kt {
-    color: #4B9BD6;
-}
-
-hr {
-    border-bottom: 1px dashed rgb(255, 216, 70);
-}
-
-th {
-    border-bottom: 1px dashed rgb(255, 216, 70);
-}
-
-img {
-    display: block;
+    color: #3f9fe4;
 }
 
 footer{
