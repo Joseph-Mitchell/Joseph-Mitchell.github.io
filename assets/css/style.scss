@@ -123,6 +123,14 @@ pre.lineno {
     padding: 0px 0px 0px 10px;
 }
 
+.widecode > .highlight > pre::before {
+    content: "shift + scroll to scroll horizontally\A";
+    color: rgba(255, 255, 255, 0.3);
+    padding: 0px 0px 0px 15px;
+    font-style: italic;
+    font-size: small;
+}
+
 /* strings */
 .highlight .s, .highlight .sb, .highlight .sc, .highlight .sd, .highlight .s2, .highlight .se, .highlight .sh, .highlight .si, .highlight .sx, .highlight .sr, .highlight .s1, .highlight .ss {
     color: #d78d70;
