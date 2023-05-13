@@ -1,0 +1,925 @@
+---
+title: "Unix CronJob Manager"
+layout: project
+date: "Oct 2019"
+links: ["https://github.com/"]
+link_names: ["GitHub"]
+tags: ["Shell Script", "Unix", "University"]
+---
+
+<h2>Summary</h2>
+<p>
+    This project was part of the Operating Systems module during my University course. 
+    The module taught us how operating systems worked at a fundamental level, going over how programs run on a computer, how memory is managed, how jobs are scheduled etc.
+    Additionally, we were taught the basics of how to write scripts and programs using Shell script.<br>
+    This module included one piece of group coursework to create a Shell script, which is the main focus of this page.
+</p>
+<h2>Project Overview</h2>
+<p>
+    Unix systems have a utility called cron, which allows the creation of jobs which are to be performed at regular time intervals. 
+    These jobs are usually created, edited and viewed from the command line using the crontab command.<br>
+    This project involved the creation of a script which would provide a user friendly interface for the purpose of managing cron jobs.
+    The tasks specified a list of cron command abilities that the script should be able to perform, so some cron functionality may not be covered by the program.<br>
+    The project was split between myself and another student, with me creating the code to control and manage cron jobs, and the other student creating the UI functionality.
+</p>
+<h2>Code Description</h2>
+<p>
+    Below a full code walkthrough of all functions used in the script is given, mostly to showcase competency. To view the raw file in full, use the GitHub link below the project title.<br>
+    As a final note, functions and code sections not written by me are marked "Written by Partner", though all functions were partially rewritten by me since original creation.
+</p>
+<br>
+<h3 id="Main Loop">Main Loop - Written by Partner</h3>
+{% highlight shell linenos %}
+while true
+do
+    echo "1. Display crontab jobs"
+    echo "2. Insert a Job"
+    echo "3. Edit a Job"
+    echo "4. Remove a Job"
+    echo "5. Remove all Jobs"	
+    echo "9. Exit"
+    echo ""
+    read -p "Choose an option: " chosenOption
+    
+    echo "Option Chosen: $chosenOption"
+    
+case $chosenOption in
+    1)
+        echo "Current Cronjobs: "
+        echo -e "\n"
+        
+        #Lists all jobs in the crontab file in a readable format
+        ShowingJobWithText
+        
+        if [ $? == 1 ] #If there are no jobs in the crontab file
+        then
+            echo "There are no jobs to display"
+        fi;;
+    2)
+        CreateJob;;
+    3)
+        ShowingJobWithText
+        if [ $? == 1 ]
+        then
+            echo "There are no jobs to edit"
+            echo -e "\n"
+        else
+            EditJob
+        fi;;
+    4)
+        ShowingJobWithText
+        
+        if [ $? == 1 ]
+        then
+            echo "There are no jobs to remove"
+            echo -e "\n"
+        else
+            read -p "Enter the number of the job you wish to remove: " jobToRemove
+            echo -e "\n"
+            
+            #Takes content of crontab file, removes selected job, 
+            #and replaces crontab file with new content
+            $(crontab -l | grep -v '^#' | grep -v '^$' | sed "${jobToRemove}d" | crontab -)
+            
+            ShowingJobWithText
+            
+            if [ $? == 1 ]
+            then
+                echo "There are no more jobs"
+            fi
+        fi;;
+    5)	
+        crontab -r | crontab -
+        
+        echo "All jobs have been removed"
+        echo -e "\n";;
+    9)
+        exit 0
+esac
+done
+{% endhighlight %}
+<p style="margin: auto; text-align: center; max-width: 90%;"><mark>The main loop of the program. This section of code provides the selection menu, where a user selects from a number of cron job management options.</mark></p>
+<p>
+    The loop begins by giving a list of choices to the user, before prompting the user to choose one by entering a number. 
+    Entering anything other than a corresponding number causes the loop to return to the start and re-echo the selections.<br>
+    Descriptions of each choice in the case statement are as follows:
+</p>
+<ul>
+    <li>
+        <mark>1)</mark> The function <a target="_self" href="#ShowingJobWithText">ShowingJobWithText</a> is called, which echoes all cron jobs in the crontab file in a readable format.
+        The ShowingJobWithText function, along with all other functions which attempt to read the crontab file, returns 1 if the crontab file does not exist or has no cron jobs.<br><br>
+        
+        The '$?' variable accesses the return value of the previously ran function, and so if this variable is equal to 1, the message "There are no jobs to display" is echoed.
+    </li>
+    <br>
+    <li>
+        <mark>2)</mark> The <a target="_self" href="#CreateJob">CreateJob</a> function is run, which has its own set of logic to allow the user to create a job.
+    </li>
+    <br>
+    <li>
+        <mark>3)</mark> The <a target="_self" href="#EditJob">EditJob</a> function is run, which prompts the user to choose a job to edit.
+    </li>
+    <br>
+    <li>
+        <mark>4)</mark> If there are jobs in the crontab file, the user is shown the jobs and prompted to choose one to delete by its corresponding number.<br><br>
+        
+        The command string [crontab -l | grep -v '^#' | grep -v '^$' | sed "${jobToRemove}d" | crontab -] is then ran.
+        The command [crontab -l] outputs the crontab files contents before [grep -v '^#'] removes lines beginning with a '#' character (these lines are comments) and the [grep -v '^$'] command removes empty lines.
+        [sed "${jobToRemove}d"] then removes the numbered line denoted by the users input.
+        Finally the [crontab -] command takes the output of the previous command string and sets the crontab file's content to it. 
+        This effectively results in the crontab file being overwritten by a version of itself which does not contain the job specified by the user.
+    </li>
+    <br>
+    <li>
+        <mark>5)</mark> The command string [crontab -r | crontab -] removes the crontab file before writing a new empty crontab file.
+    </li>
+    <br>
+    <li>
+        <mark>9)</mark> The script is exited, returning a value of 0.
+    </li>
+</ul>
+<br>
+<h3 style="margin-bottom: 0;" id="ShowingJobWithText">ShowingJobWithText - Written by Partner</h3>
+<p style="margin: auto; text-align: center; max-width: 90%;">Referenced in: <a target="_self" href="#Main Loop">Main Loop</a></p>
+{% highlight shell linenos %}
+ShowingJobWithText()
+{
+    cronOnlyJobs=$(crontab -l | grep -v '^#' | grep -v '^$')
+    
+    #Ends early if the crontab file is empty
+    if [ "$cronOnlyJobs" == "" ]
+    then
+    return 1 
+    fi
+    
+    #For a sequence starting at 1 and ending at the number of lines in cronOnlyJobs
+    for i in $(seq 1 $(echo "$cronOnlyJobs" | wc -l))
+    do
+    #Take the ith field, using '\n' as a delimiter, therefore separating by line
+    job=$(echo "$cronOnlyJobs" | cut -f$i -d$'\n')
+        
+    translated=$(TranslateJob "$job") #Translates a job to readable text
+    echo -e "$i. $translated\n"
+    done
+}
+{% endhighlight %}
+<p style="margin: auto; text-align: center; max-width: 90%;"><mark>This function translates the full crontab file into numbered, readable jobs.</mark></p>
+<p>
+    First the variable $cronOnlyJobs is set to the output of the command string [crontab -l | grep -v '^#' | grep -v '^$'].
+    The [crontab -l] command outputs the content of the crontab file,
+    the [grep -v '^#'] command removes all lines beginning with a '#' character - as these lines are comments -
+    and the [grep -v '^$'] removes blank lines.<br><br>
+    
+    If $cronOnlyJobs is empty, then either there was no crontab file, or the file had no jobs. In this case the function returns 1.<br><br>
+    
+    Finally a for loop is ran using the command string [seq 1 $(echo "$cronOnlyJobs" | wc -l)] to denote the number of loops. 
+    The [echo "$cronOnlyJobs" | wc -l] portion pipes $cronOnlyJobs into the [wc -l] command, which counts the number of lines in the variable.
+    This all in all creates a loop which runs once for each line in $cronOnlyJobs.<br><br>
+    
+    The first line within the loop sets the $job variable to a single job from the list. This is done with the [cut -f$i -d$'\n'].
+    The '-f' option causes the command to separate a "field", which is any group of text separated by a specified delimiter. 
+    The '$i' variable tells the command which field should be cut from the list. 
+    The '-d' option specifies the character to be used as a delimiter, which in this case is '\n' a.k.a the newline character, therefore causing the command to cut each line separately.<br><br>
+    
+    This job is then passed into the <a target="_self" href="#TranslateJob">TranslateJob</a> function, which translates the job into a more user friendly format.<br><br>
+    
+    Finally, the translated job is echoed to the terminal, along with its number.
+</p>
+<br>
+<h3 style="margin-bottom: 0;" id="EditJob">EditJob - Written by Partner</h3>
+<p style="margin: auto; text-align: center; max-width: 90%;">Referenced in: <a target="_self" href="#Main Loop">Main Loop</a></p>
+{% highlight shell linenos %}
+EditJob()
+{
+    echo "Choose a job to Edit: "
+    read jobToEdit
+    
+    #Contains only the line with the specified job
+    editingJob=$(crontab -l | grep -v '^#' | grep -v '^$' | sed "${jobToEdit}!d")
+    
+    TranslateJob "$editingJob"
+    
+    echo -e "\n"
+    echo "Rewrite this job? (y/n)"
+    read yesOrNo
+    echo -e "\n"
+    
+    if [ $yesOrNo == "y" ]
+    then
+        #Overrites crontab file with copy not including chosen job
+        crontab -l | grep -v '^#' | grep -v '^$' | sed "${jobToEdit}d" | crontab - 
+        
+        CreateJob
+        
+        echo "Job edit succesful"
+    elif [ $yesOrNo == "n" ]
+    then
+        echo ""	
+    else
+        echo "Invalid Selection"
+    fi
+}
+{% endhighlight %}
+<p style="margin: auto; text-align: center; max-width: 90%;"><mark>This function removes a specified cron job, before allowing the user to create a new job to replace it.</mark></p>
+<p>
+    First, the user is prompted to choose a job by its number (they will have already been shown the list of jobs with corresponding numbers before the function is run).
+    Secondly, the variable $editingJob is set to the output of the command string [crontab -l | grep -v '^#' | grep -v '^$' | sed "${jobToEdit}!d"].
+    This is similar to the command string explained for case 4 in the main loop, however the sed command ends with '!d' instead of 'd'.
+    This causes all lines <em>other</em> than the specified one to be deleted.<br><br>
+    
+    $editingJob is then passed into the <a target="_self" href="#TranslateJob">TranslateJob</a> function, which takes the job and echoes it to the terminal in a user friendly format.<br><br>
+    
+    The user is then asked to confirm if they wish to edit this job. <br><br>
+    
+    If yes, the specified job is removed from the crontab file, before the <a target="_self" href="#CreateJob">CreateJob</a> function is ran to create a new job in its place.
+</p>
+<br>
+<h3 style="margin-bottom: 0;" id="CreateJob">CreateJob</h3>
+<p style="margin: auto; text-align: center; max-width: 90%;">Referenced in: <a target="_self" href="#Main Loop">Main Loop</a> <a target="_self" href="#EditJob">EditJob</a></p>
+{% highlight shell linenos %}
+CreateJob() { 
+    
+    echo -e "Choose a preset or enter a specific periodicity?\n"
+    echo -e "1. Preset"
+    echo -e "2. Custom\n"
+    
+    #Validate input
+    while true
+    do	
+        read -p "Choose one of the above: " choice
+        if [ $choice == 1 ] || [ $choice == 2 ]
+        then
+            break;
+        else
+            echo -e "Please choose a valid option\n"
+        fi
+    done
+    
+    if [ $choice == 1 ]
+    then
+        echo "1. Hourly"
+        echo "2. Daily"
+        echo "3. Weekly"
+        echo "4. Monthly"
+        echo "5. Yearly"
+        echo "6. At Reboot"
+        echo -e "\n"
+        
+        while true
+        do
+            read -p "Choose one of the above: " preset
+            if [ $preset == 1 ] || [ $preset == 2 ] || [ $preset == 3 ] || 
+               [ $preset == 4 ] || [ $preset == 5 ] || [ $preset == 6 ]
+            then
+                break;
+            else
+                echo -e "Please choose a valid option\n"
+            fi
+        done
+        
+        case $preset in
+            1)
+                time="@hourly";;
+            2)
+                time="@daily";;
+            3)
+                time="@weekly";;
+            4)
+                time="@monthly";;
+            5)
+                time="@yearly";;
+            6)
+                time="@reboot";;
+        esac
+    else
+        #Each time category loops to check that the users input is correctly formatted
+        while true
+        do
+            read -p "Enter minute frequency: " minute
+            
+            #Determine if input was a valid time for "minute" section
+            error=$(ValidateTimeSection "$minute" "1") 
+            
+            if [ "$error" == "" ] #If no error
+            then
+                break;
+            else	
+                echo "$error"
+            fi
+        done
+        while true
+        do
+            read -p "Enter hour frequency: " hour
+            error=$(ValidateTimeSection "$hour" "2")
+            if [ "$error" == "" ]
+            then
+                break;
+            else
+                echo "$error"
+            fi
+        done
+        while true
+        do	
+            read -p "Enter day frequency: " day
+            error=$(ValidateTimeSection "$day" "3")
+            if [ "$error" == "" ]
+            then
+                break;
+            else
+                echo "$error"
+            fi
+        done
+        while true
+        do
+            read -p "Enter month frequency: " month
+            error=$(ValidateTimeSection "$month" "4")
+            if [ "$error" == "" ]
+            then
+                break;
+            else
+                echo "$error"
+            fi
+        done
+        while true
+        do
+            read -p "Enter weekday frequency: " weekday
+            error=$(ValidateTimeSection "$weekday" "5")
+            if [ "$error" == "" ]
+            then
+                break;
+            else
+                echo "$error"
+            fi
+        done
+        
+        time="$minute $hour $day $month $weekday"
+    fi
+    
+    read -p "Enter command to run: " command
+    
+    job="$time $command"
+    
+    TranslateJob "$job"
+    
+    echo -e "\n"
+    
+    read -p "Create the following new job?(y/n): " choice
+    
+    #Checks the choice input and if it was valid
+    while true
+    do
+        if [ "$choice" == "y" ]
+        then
+            (crontab -l; echo "$job") | crontab -
+            break;
+        elif [ "$choice" == "n" ]
+        then
+            break;
+        else
+            read -p "Please enter a valid choice(y/n): " choice
+        fi
+    done
+}
+{% endhighlight %}
+<p style="margin: auto; text-align: center; max-width: 90%;"><mark>This function takes a number of user inputs to create a new cron job.</mark></p>
+<p>
+    The user is first asked if they'd like to create the new job using a preset, or a manually input periodicity. 
+    The while loop - along with other similar loops within the function - loops until the user gives a valid input.<br><br>
+    
+    If the user chooses to use a preset, they are asked which preset they wish to use. The variable $time is set to the corresponding periodicity in the following case statement.<br><br>
+    
+    If the user instead chooses to manually set the periodicity of the cron job, they will first be asked to enter the minute portion for the cron job.<br><br>
+    
+    The function <a target="_self" href="#ValidateTimeSection">ValidateTimeSection</a> is ran to validate the users input. 
+    This function checks that the users input (the second passed variable) is correctly formatted for the time category (the first passed variable), before returning any errors as a string.
+    If the function returns an empty string, there was no error, and so the while loop breaks, with the $minute variable having been set to the users selection.<br><br>
+    
+    The same is done for all time categories, before they are concatenated into the $time variable.<br><br>
+    
+    After either time section is completed, the user is prompted to enter a command, after which the $job variable is set by concatenating the $time and $command variables.<br><br>
+    
+    The <a target="_self" href="#TranslateJob">TranslateJob</a> function is then ran to show the user their job in a user friendly format.<br><br>
+    
+    The user is finally asked if they wish to create this job, and if they answer yes, the job is added to the end of the crontab file.
+</p>
+<br>
+<h3 style="margin-bottom: 0;" id="ValidateTimeSection">ValidateTimeSection</h3>
+<p style="margin: auto; text-align: center; max-width: 90%;">Referenced in: <a target="_self" href="#CreateJob">CreateJob</a></p>
+<section class="widecode">
+{% highlight shell linenos %}
+ValidateTimeSection() {
+    #$1 = users input, $2 = time category (minute, hour, day etc.)
+    
+    #Assigns the max based on the time section
+    case $2 in
+        1)
+            max=59;; #Minute
+        2)
+            max=23;; #Hour
+        3)
+            max=31;; #Day
+        4)
+            max=12;; #Month
+        5)
+            max=7;; #Week
+    esac
+    
+    #Empty input
+    if [ "$1" == "" ]
+    then
+        echo "Input was blank"
+        return 
+    fi
+    
+    #Removes all valid characters to check that no invalid characters are present
+    minusValidChars=$(echo "$1" | sed -e "s:[0-9]::g" -e "s:/::g" -e "s:-::g" -e "s:*::g" -e "s:,::g")
+    
+    #Accounts for the use of a string to specify a specific month or weekday
+    if [ $2 == 4 ] #Month
+    then
+        minusValidChars=$(echo "$minusValidChars" | sed -e "s:jan::gI" -e "s:feb::gI" -e "s:mar::gI" -e "s:apr::gI" -e "s:may::gI" -e "s:jun::gI" -e "s:jul::gI" -e "s:aug::gI" -e "s:sep::gI" -e "s:oct::gI" -e "s:nov::gI" -e "s:dec::gI")
+    elif [ $2 == 5 ] #Weekday
+    then
+        minusValidChars=$(echo "$minusValidChars" | sed -e "s:mon::gI" -e "s:tue::gI" -e "s:wed::gI" -e "s:thu::gI" -e "s:fri::gI" -e "s:sat::gI" -e "s:sun::gI")
+    fi
+    
+    #Any remaining characters are invalid
+    if [ "$minusValidChars" != "" ]
+    then
+        echo "Input contained invalid characters"
+        return 
+    fi
+    
+    #Holds the number of values seperated by a ","
+    valueNo=$(echo "$1" | tr "," "\n" | wc -l)
+    
+    #Loops through all comma separated values
+    for i in $(seq 1 $valueNo)
+    do
+        #Create raw value from list of values 
+        time="$(echo "$1" | cut -f$i -d ',')"
+        
+        if [ "$time" == "" ]
+        then
+            echo "A value for one or more parameters was formatted incorrectly"
+            return 
+        fi
+        
+        #Check there are no more than one "/", "-" or "*"
+        if [ $(echo "$time" | tr "/" "\n" | wc -l) -gt 2 ] || 
+           [ $(echo "$time" | tr "-" "\n" | wc -l) -gt 2 ] || 
+           [ $(echo "$time" | tr "*" "\n" | wc -l) -gt 2 ]
+        then
+            echo "One or more parameters were formatted incorectly"
+            return 
+        fi
+        
+        #If the value uses a step
+        if [[ "$time" == *"/"* ]]
+        then
+            step="$(echo "$time" | cut -f2 -d '/')"
+            time="$(echo "$time" | cut -f1 -d '/')"
+            
+            #Check that the step portion is not empty
+            if [ "$step" == "" ]
+            then
+                echo "A step section for one of more parameters was formatted incorrectly"
+                return 
+            fi
+            
+            if [[ "$step" == 0 ]]
+            then
+                echo "A step section for one of more parameters was formatted incorrectly"
+                return 
+            fi
+            
+            #Check that the step portion only contains digits
+            stepCheck=$(echo "$step" | sed "s:[0-9]::g")
+            
+            if [ "$stepCheck" != "" ] 
+            then
+                echo "A step section for one of more parameters was formatted incorrectly"
+                return 
+            fi
+            
+            #If value does not contain an astersisk and is not a range
+            if [[ "$time" != "*" && "$time" != *"-"* ]]
+            then
+                #Translates valid text to numbers
+                time="$(MonthWeekdayStringToNum "$time")"
+                
+                let "dif = $max - $time"
+                
+                #Check that step is valid with range
+                if [ $step -gt $dif ]
+                then
+                    echo "A step section for one of more parameters was formatted incorrectly"
+                    return 
+                fi
+            fi
+        fi
+        
+        if [[ "$time" == *"-"* ]]
+        then
+            #Check that range portion does not contain asterisks
+            if [[ "$time" == *"*"* ]]
+            then
+                echo "A range of values for one or more parameters was formatted incorrectly"
+                return 
+            fi
+            
+            #Cut min of range
+            a="$(echo $time | cut -f1 -d '-')"
+            #Translate valid text to numbers
+            a="$(MonthWeekdayStringToNum "$a")"
+            
+            #Cut max of range
+            b="$(echo $time | cut -f2 -d '-')"
+            #Translate valid text to numbers
+            b="$(MonthWeekdayStringToNum "$b")"
+            
+            #Check that neither side of range is blank
+            if [ "$a" == "" ] || [ "$b" == "" ]
+            then
+                echo "A range of values for one or more parameters was formatted incorrectly"
+                return 
+            fi
+            
+            #Check that range values are in correct order
+            if [ "$a" -gt "$b" ]
+            then
+                echo "A range of values for one or more parameters was formatted incorrectly"
+                return 
+            fi
+            
+            #Check that range values are below max
+            if [ $a -gt $max ] || [ $b -gt $max ]
+            then
+                echo "A range of values for one or more parameters was formatted incorrectly"
+                return 
+            fi
+            
+            #If input contained a step
+            if [ "$step" != "" ]
+            then
+                let "dif = $b - $a"
+                
+                #Check that step is valid with range
+                if [ $step -gt $dif ]
+                then
+                    echo "A step section for one of more parameters was formatted incorrectly"
+                    return 
+                fi
+            fi
+        else
+            #Translate valid text to numbers
+            time="$(MonthWeekdayStringToNum "$time")"
+        
+            if [[ "$time" == *"*"* ]]
+            then
+                return
+            fi
+        
+            if [ $time -gt $max ]
+            then
+                echo "A value for one or more parameters was formatted incorrectly"
+                return 
+            fi
+        fi	
+    done
+}
+{% endhighlight %}
+</section>
+<p style="margin: auto; text-align: center; max-width: 90%;"><mark>This function takes a time section from a job being created and validates it.</mark></p>
+<p>
+    This function initialy seems very complex, but it is simply used to run a number of validity checks and return an appropriate error message if any errors are found.<br><br>
+    In this function, the first parameter $1 is the users input for the desired value of the time section, 
+    and the second parameter $2 is the time category for this section (e.g. minute, hour day etc.)<br><br>
+    First, the variable $max is set dependant on the time category, before the user input is checked for being blank. 
+    In this case, along with any other case of error, an appropriate error message is echoed before the function returns.<br><br>
+    Next, the $minusValidChars variable is set the users input minus all valid characters.
+    If the time category was either weekday or month, another set of valid strings are cut from the variable.
+    The variable is then checked too see if anything is left behind, and if so an error is echoed.<br><br>
+    After this, the $valueNo variable is used to hold the number of fields in the users input that are separated by a comma, as each of these fields represents a different value for the time section.<br><br>
+    Within the for loop, the $time variable is set to the current subsection (as denoted by the current loop), 
+    before it is checked for an empty value or having more than one of each special characters '/', '-' or '*', returning an error message if either of these cases is true.<br><br>
+    If the variable contains a '/' then the user has entered a step for the time section.<br>
+    <section style="margin-left: 4em;">
+        In this case, the $step variable is set to the portion of the value after the '/', and the $time variable is set to the portion before the '/'.<br><br>
+        Then, $step is checked to make sure it is not empty and is not 0, as a step value of 0 is not valid.<br><br>
+        Next, the $stepCheck variable is used, first to remove all valid characters from $step, and secondly to check that it there are no remaining characters.<br><br>
+        Finally, if $time did not contain an '*' or a '-', then it is first translated with the <a target="_self" href="#MonthWeekdayStringToNum">MonthWeekdayStringToNum</a> function -
+        which takes any valid weekday or month relevant strings (e.g. mon, tue, jan, feb etc.) and translates them to their relevant numerical representation - 
+        before a check is ran to make sure $step is not greater than the difference between $time and $max.
+    </section>
+    If $time contains a '-' then the user has entered a range of values for the time section.<br><br>
+    <section style="margin-left: 4em;">
+        In this case, $time is first checked to see if it contains an '*', as this character is not valid in a range.<br><br>
+        After this, the $a and $b variables are created, being made to represent each side of the range argument by cutting $time with '-' as the delimiter, 
+        and then using the MonthWeekdayStringToNum function to translate valid string inputs.<br><br>
+        A range of checks are then made to ensure that neither value is blank, that the second value is larger than the first and that both values are below the max for this time category.<br><br>
+        Finally, if there was a step value entered by the user, the step is checked to make sure it is not larger than the difference between the two range values.
+        This was not done with the rest of the step checks as the $a and $b variables had not yet been created.
+    </section>
+    Finally, if there was no '-' in the users input, $time is ran through the MonthWeekdayStringToNum function, 
+    before it is checked to either contain an '*' (In which case the function returns with no error) or to be greater than the max (In which case an error is echoed).
+</p>
+<h3 style="margin-bottom: 0;" id="MonthWeekdayStringToNum">MonthWeekdayStringToNum</h3>
+<p style="margin: auto; text-align: center; max-width: 90%;">Referenced in: <a target="_self" href="#ValidateTimeSection">ValidateTimeSection</a></p>
+{% highlight shell linenos %}
+MonthWeekdayStringToNum() {
+    val="$1"
+    
+    shopt -s nocasematch
+    
+    case "$val" in 
+        jan)
+            val=1;;
+        feb)
+            val=2;;
+        mar)
+            val=3;;
+        apr)
+            val=4;;
+        may)
+            val=5;;
+        jun)
+            val=6;;
+        jul)
+            val=7;;
+        aug)
+            val=8;;
+        sep)
+            val=9;;
+        oct)
+            val=10;;
+        nov)
+            val=11;;
+        dec)
+            val=12;;
+    esac
+    
+    case "$val" in
+        mon)
+            val=1;;
+        tue)
+            val=2;;
+        wed)
+            val=3;;
+        thu)
+            val=4;;
+        fri)
+            val=5;;
+        sat)
+            val=6;;
+        sun)
+            val=7;;
+    esac
+    
+    shopt -u nocasematch
+    
+    echo "$val"
+}
+{% endhighlight %}
+<p style="margin: auto; text-align: center; max-width: 90%;"><mark>This function checks the input for valid strings, translating them to their numeric counterparts.</mark></p>
+<p>
+    First the $val variable is set to the input variable - so that if no valid strings were present the function will still echo a value - before the shopt command is run. 
+    This command is used to set or unset certain shell behaviour options. In this case, the nocasematch option allows case and if statements to match strings regardless of capitalization.<br><br>
+    The following two case statements set $val to the correct number depending on $val's existing value.<br><br>
+    The shopt command is ran again to unset the nocasematch option, before $val is echoed and the function ends.
+</p>
+<h3 style="margin-bottom: 0;" id="TranslateJob">TranslateJob</h3>
+<p style="margin: auto; text-align: center; max-width: 90%;">Referenced in: <a target="_self" href="#ShowingJobWithText">ShowingJobWithText</a> <a target="_self" href="#EditJob">EditJob</a> <a target="_self" href="#CreateJob">CreateJob</a></p>
+<section class="widecode">
+{% highlight shell linenos %}
+TranslateJob () {   
+    #If job uses a time preset
+    if [[ "$1" == "@"* ]]
+    then
+        #Separate job between time and command sections
+        time=$(echo "$1" | cut -f1 -d ' ')
+        command=$(echo "$1" | cut -f2 -d ' ')
+        
+        case "$time" in
+            "@yearly")
+                echo -e "At the beginning of every year: \n$command";;
+            "@annually")
+                echo -e "At the beginning of every year: \n$command";;
+            "@monthly")
+                echo -e "At the beginning of every month: \n$command";;
+            "@weekly")
+                echo -e "At the beginning of every week: \n$command";;
+            "@daily")
+                echo -e "At the beginning of every day: \n$command";;
+            "@hourly")
+                echo -e "At the beginning of every hour: \n$command";;
+            "@reboot")
+                echo -e "After rebooting: \n$command";;
+        esac
+    else
+        #Seperates each time section of the job	
+        minute=$(echo "$1" | cut -f1 -d ' ')
+        hour=$(echo "$1" | cut -f2 -d ' ')
+        day=$(echo "$1" | cut -f3 -d ' ')
+        month=$(echo "$1" | cut -f4 -d ' ')
+        weekday=$(echo "$1" | cut -f5 -d ' ')
+        
+        #Joins the seperate time sections of the job back together
+        time="$minute $hour $day $month $weekday "
+        
+        #Alters the time section of the job so that 
+        #asterisks are correctly removed in the proceeding line
+        time=$(echo "$time" | sed "s:\*:\\\*:g")       
+        #Uses the full time section of the job to find the command section
+        command=$(echo "$1" | sed "s:^$time::g")
+        
+        #Echoes the full translation
+        echo -e "At $(TranslateJobTime "$minute" 1) past $(TranslateJobTime "$hour" 2) on $(TranslateJobTime "$day" 3) in $(TranslateJobTime "$month" 4) on $(TranslateJobTime "$weekday" 5): \n$command"
+    fi
+}
+{% endhighlight %}
+</section>
+<p style="margin: auto; text-align: center; max-width: 90%;"><mark>This function takes a cron job and translates it to user friendly text.</mark></p>
+<p>
+    Initially, the job is checked for an '@' at the start of the line, as this indicates the use of a time preset.
+    <section style="margin-left: 4em;">
+        If a time preset is used, the $time and $command variables are used to hold their respective sections of the job.<br><br>
+        A case statement is then used to determine the correct user friendly message to represent the time preset, with the command following.
+    </section>
+    If there was no '@' symbol, then no time preset is used.<br><br>
+    <section style="margin-left: 4em;">
+        In this case, each time category is separated from the job using the cut command, before being concatenated back together in the $time variable.<br><br>
+        Then, the $time variable is altered to change all '*' symbols to '\\*'. 
+        This is done because '*' symbols within the sed command can have stange effects, so the '\\' is inserted to escape this character.<br><br>
+        The $command variable is then created by removing the content of the $time variable from the $1 input variable.<br><br>
+        Finally, the full translated job is echoed, using the <a target="_self" href="#TranslateJobTime">TranslateJobTime</a> function to induvidually translate the separated time categories.
+    </section>
+</p>
+<h3 style="margin-bottom: 0;" id="TranslateJobTime">TranslateJobTime</h3>
+<p style="margin: auto; text-align: center; max-width: 90%;">Referenced in: <a target="_self" href="#TranslateJob">TranslateJob</a></p>
+{% highlight shell linenos %}
+TranslateJobTime () {
+    case $2 in
+        1)
+            timeCategory="minute"
+            max=59;;
+        2)
+            timeCategory="hour"
+            max=23;;
+        3)
+            timeCategory="day"
+            max=31;;
+        4)
+            timeCategory="month"
+            max=DEC;;
+        5)
+            timeCategory="weekday"
+            max=SUN;;
+    esac
+    
+    #Holds the number of values seperated by a ","
+    valueNo=$(echo "$1" | tr "," "\n" | wc -l)
+    
+    #Steps through each value to convert them to readable text
+    for i in $(seq 1 $valueNo)
+    do
+        #Cut current value from list of values 
+        time="$(echo "$1" | cut -f$i -d ',')"
+        
+        #If there is a step (/), seperate from value
+        if [[ "$time" == *"/"* ]]
+        then
+            step="$(echo "$time" | cut -f2 -d '/')"	
+            time="$(echo "$time" | cut -f1 -d '/')"
+            
+            primaryString="every $step ${timeCategory}s" 
+            
+            secondaryString=" from $(weekMonthChange $time $timeCategory) through $max"
+        else   
+            if [["$time" == *"*"*]] || [["$time" == *"-"*]]
+            then
+                primaryString="every $timeCategory"
+            elif ["$timeCategory" == "month"] || ["$timeCategory" == "weekday"]
+            then
+                primaryString=""
+            else
+                primaryString="$timeCategory"
+            fi
+            
+            if [["$time" == *"-"*]]
+            then
+                a=$(weekMonthChange "$(echo "$time" | cut -f1 -d '-')" $timeCategory)
+                b=$(weekMonthChange "$(echo "$time" | cut -f2 -d '-')" $timeCategory)
+                secondaryString=" from $a through $b"
+            elif ["$time" == *"*"*]
+            then
+                secondaryString=""
+            elif ["$timeCategory" == "month"] || ["$timeCategory" == "weekday"]
+            then
+                secondaryString="$(weekMonthChange $time $timeCategory)"
+            else
+                secondaryString=" $(weekMonthChange $time $timeCategory)"
+            fi
+        fi
+        
+        #primaryString holds time category (minute, hour etc.) plus extra text
+        #secondaryString holds time value plus extra text
+        fullString="$primaryString$secondaryString"
+        
+        #Only include 'and' after the first value
+        if [ $i != 1 ]
+        then
+            completedTranslation="$completedTranslation and $fullString"
+        else
+            completedTranslation="$fullString"
+        fi
+    done
+    
+    echo "$completedTranslation"
+}
+{% endhighlight %}
+<p style="margin: auto; text-align: center; max-width: 90%;"><mark>This function takes a single time section from a cron job and translates it to user friendly text.</mark></p>
+<p>
+    The function begins by using a case statement to set the correct values for the $timeCategory and $max variables.<br><br>
+    A for loop is then prepared to run once for each field in the $1 input variable separated by a ','.<br><br>
+    Within the for loop, the current time value is cut from the $1 input variable, before it is checked to contain a '/', which would show it to contain a step value.
+    <section style="margin-left: 4em;">
+        If the $time variable contained a step, the step and time value are separated into respective variables.<br><br>
+        The $primaryString and $secondaryString variables are then set, 
+        with the latter utilizing the <a target="_self" href="#MonthWeekdayNumToString">MonthWeekdayNumToString</a> function to turn relevant values into their string counterparts (e.g. 1 to jan or mon, 2 to feb or tue).<br><br>
+        $primaryString is used in this function to contain the time category and any other text for readability (e.g. every minute, every 4 days etc.),
+        while $secondaryString holds the time value itself (e.g. 2, MON, from JAN through FEB etc.)
+    </section>
+    If there was no '/' in $time then there is no step value. In this case:<br><br>
+    <section style="margin-left: 4em;">
+        First the $primaryString variable is set depending on a number of cases.<br><br>
+        The same is done for $secondaryString. 
+        Additionally, if $time contains a range of values, the $a and $b variables are used to separate the two range values,
+        with them also being ran through the MonthWeekdayNumToString function.
+    </section>
+    After the $primaryString and $secondaryString variables are set, the $fullString variable is created by concatenating the two.<br><br>
+    This variable is then added to the $completedTranslation variable, along with "and" if this is not the first loop.<br><br>
+    Finally, once all comma separated values have been ran through the for loop, $completedTranslation is echoed and the function ends.
+</p>
+<h3 style="margin-bottom: 0;" id="MonthWeekdayNumToString">MonthWeekdayNumToString</h3>
+<p style="margin: auto; text-align: center; max-width: 90%;">Referenced in: <a target="_self" href="#TranslateJobTime">TranslateJobTime</a></p>
+{% highlight shell linenos %}
+MonthWeekdayNumToString() {
+    val="$1"
+    
+    if [ "$2" == "month" ]
+    then
+        case "$val" in 
+            1)
+                val="JAN";;
+            2)
+                val="FEB";;
+            3)
+                val="MAR";;
+            4)
+                val="APR";;
+            5)
+                val="MAY";;
+            6)
+                val="JUN";;
+            7)
+                val="JUL";;
+            8)
+                val="AUG";;
+            9)
+                val="SEP";;
+            10)
+                val="OCT";;
+            11)
+                val="NOV";;
+            12)
+                val="DEC";;
+        esac
+    elif [ "$2" == "weekday" ]
+    then
+        case "$val" in
+            1)
+                val="MON";;
+            2)
+                val="TUE";;
+            3)
+                val="WED";;
+            4)
+                val="THU";;
+            5)
+                val="FRI";;
+            6)
+                val="SAT";;
+            7)
+                val="SUN";;
+        esac
+    fi
+    
+    echo "$val"
+}
+{% endhighlight %}
+<p style="margin: auto; text-align: center; max-width: 90%;"><mark>This function translated a numeric value to a user friendly string value.</mark></p>
+<p>
+    The $1 input variable holds the time value, while the $2 input variable holds the time values category. 
+    Dependant on the category and the time value, a user friendly string is chosen with one of two case statements to be echoed.
+</p>
