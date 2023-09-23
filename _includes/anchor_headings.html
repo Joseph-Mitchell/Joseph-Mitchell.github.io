@@ -61,6 +61,7 @@
   {% assign nodes = include.html | split: '<h' %}
 
   {% capture edited_headings %}{% endcapture %}
+  {% capture processed_heading_ids %}{% endcapture %}
 
   {% for _node in nodes %}
     {% capture node %}{{ _node | strip }}{% endcapture %}
@@ -113,8 +114,25 @@
       {% if html_id == "" %}
         {% assign html_id = false %}
       {% endif %}
+      
+      <!-- If another heading already has this id... -->
+      {% assign id_suffix = -1 %}
+      {% assign testing_id = html_id %}
+      {% for i in (0..9) %}
+        {% if processed_heading_ids contains testing_id %}
+          {% assign id_suffix = id_suffix | plus: 1 %}
+          {% capture testing_id %}{{ html_id }}{{ id_suffix }}{% endcapture %}
+          {% assign i = 0 %}
+        {% else %}
+          {% assign html_id = testing_id %}
+          {% break %}
+        {% endif %}
+      {% endfor %}
+      
       <!-- Append the generated id to other potential header attributes. -->
       {% capture h_attrs %}{{ headerAttrs }} id="%html_id%"{% endcapture %}
+      
+      {% capture processed_heading_ids %}{{ processed_heading_ids }}{{ html_id }}{% endcapture %}
     {% endif %}
 
     <!-- Build the anchor to inject for our heading -->
