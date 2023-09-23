@@ -192,8 +192,12 @@ image_source: "/assets/images/"
 <p></p>
 {% endif %}
 
+{% capture after_anchors %}
+    {% include anchor_headings.html html=content generateId=true %}
+{% endcapture %}
+
 {% if page.toc %}
-    {% include toc.html html=content h_max=2 %}
+    {% include toc.html html=after_anchors h_max=3 skip_no_ids=true ordered=true %}
 {% endif %}
 
-{{content}}
+{{after_anchors}}
