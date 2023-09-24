@@ -129,6 +129,24 @@ image_source: "/assets/images/"
         text-align: center;
         font-size: small;
     }
+    
+    .toc {
+        margin: auto;
+        border: 2px solid rgb(255, 216, 70);
+        border-radius: 5px;
+        box-shadow: 0px 0px 5px 0px rgba(255, 216, 70, 0.75);
+        width: fit-content;
+    }
+    
+    .toc h2 {
+        text-align: center;
+        margin: 10px 0px 5px 0px;
+    }
+    
+    .toc #contents {
+        padding: 0px 10px 10px 40px;
+        margin: 0;
+    }
 </style>
 
 <h1 id="project-title">{{page.title}}</h1>
@@ -197,7 +215,10 @@ image_source: "/assets/images/"
 {% endcapture %}
 
 {% if page.toc %}
-    {% include toc.html html=after_anchors h_max=3 skip_no_ids=true ordered=true %}
+    <div class="toc">
+        <h2>Contents</h2>
+        {% include toc.html html=after_anchors h_max=3 skip_no_ids=true ordered=true id="contents" %}
+    </div>
 {% endif %}
 
 {{after_anchors}}
