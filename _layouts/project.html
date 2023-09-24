@@ -140,12 +140,28 @@ image_source: "/assets/images/"
     
     .toc h2 {
         text-align: center;
-        margin: 10px 0px 5px 0px;
+        margin: 8px 0px 3px 0px;
     }
     
     .toc #contents {
-        padding: 0px 10px 10px 40px;
+        padding: 0px 15px 15px 15px;
         margin: 0;
+    }
+    
+    .toc ul {
+        counter-reset: entry;
+        padding-left: 25px;
+    }
+    
+    .toc #contents li {
+        list-style-type: none;
+        list-style-image: none;
+    }   
+    
+    .toc #contents li:before {
+        content: counters(entry, ".");
+        counter-increment: entry;
+        color: rgba(255, 255, 255, 0.3);;
     }
 </style>
 
@@ -217,7 +233,7 @@ image_source: "/assets/images/"
 {% if page.toc %}
     <div class="toc">
         <h2>Contents</h2>
-        {% include toc.html html=after_anchors h_max=3 skip_no_ids=true ordered=true id="contents" %}
+        {% include toc.html html=after_anchors h_max=3 skip_no_ids=true id="contents" %}
     </div>
 {% endif %}
 
