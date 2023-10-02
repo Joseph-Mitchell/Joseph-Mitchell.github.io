@@ -219,7 +219,7 @@ image_source: "/assets/images/"
 {% if page.links and page.link_names %}
 <p id="project-links">Links: 
     {% for link in page.links %}
-    <a href="{{page.links[forloop.index0]}}">{{page.link_names[forloop.index0]}}</a>
+    <a href="{{page.links[forloop.index0]}}" target="_blank">{{page.link_names[forloop.index0]}}</a>
     {% endfor %}
 </p>
 {% else %}
