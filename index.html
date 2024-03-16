@@ -18,7 +18,7 @@ title: "Home"
         transform: translate(-50%, -50%);
         text-shadow: 0 0 0.07em rgba(255, 215, 70, 0.75), 0.028em 0.028em rgb(10, 0, 20), -0.028em 0.028em rgb(10, 0, 20), 0.028em -0.028em rgb(10, 0, 20), -0.028em -0.028em rgb(10, 0, 20);
     }
-    
+
     @media screen and (min-width: 1215px) {
         h1#webtitle {
             font-size: 140px;
@@ -60,13 +60,11 @@ title: "Home"
         let opacity = 1.0;
         let id = setInterval(update, 50);
         function update() {
-            if (opacity <= 0)
-            {
+            if (opacity <= 0) {
                 element.style.display = "none";
                 clearInterval(id);
             }
-            else
-            {
+            else {
                 opacity -= 0.05;
                 element.style.opacity = opacity;
             }
@@ -84,16 +82,17 @@ title: "Home"
 <div class="container">
     <h1 style="margin-top: 20px;">About Me</h1>
     <p>
-        My name is Joseph Mitchell, and I am a graduate of Edinburgh Napier University with a First Class Honours in BSc Games Development. 
-        Throughout my education I have had experience not only with the more creative side of Game Dev, but also in many technical aspects of Software Engineering as a whole.
-        Some of my college and university projects are available from the link above, although I am still in the process of adding them.<br>
-        Currently I am looking to join a development team - either working with games or software in general - where I can utilize the skills I have learned from my education in the real world.<br>
-        I also occasionally spend time working on my own personal projects. You can see what I am currently working on in the section below.
+        My name is Joseph Mitchell, and I am a graduate of Edinburgh Napier University with a First Class Honours in BSc
+        Games Development.
+        Throughout my education I have had experience not only with the more creative side of Game Dev, but also in many
+        technical aspects of Software Engineering as a whole.
+        Some of my college and university projects are available from the link above, although I am still in the process
+        of adding them.
     </p>
-    <h1>Currently I'm Working On...</h1>
+    <h1>Currently I'm</h1>
     <div id="hiddenreveal">
         <p>
-            Fully refactoring <a href="https://github.com/Joseph-Mitchell/Bone-King">Bone King</a> to bring it up to my current level of programming.
+            Preparing to start at the Digital Futures academy on the Software Engineering course.
         </p>
         <img id="revealbutton" onclick="reveal()" src="/assets/images/smoke.gif">
     </div>
