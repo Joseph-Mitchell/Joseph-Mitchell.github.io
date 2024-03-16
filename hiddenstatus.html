@@ -1,0 +1,62 @@
+<style>
+    #hiddenreveal {
+        width: 80%;
+        margin: auto;
+        position: relative;
+        border: 3px solid rgb(255, 216, 70);
+        border-radius: 50px;
+        box-shadow: 0px 0px 5px 0px rgba(255, 216, 70, 0.75);
+        overflow: hidden;
+    }
+
+    #hiddenreveal p {
+        color: #eaeaea;
+        font-size: 16px;
+        line-height: 1.5;
+        font-family: Monaco, "Bitstream Vera Sans Mono", "Lucida Console", Terminal, monospace;
+        position: relative;
+        text-align: center;
+        margin: 5% 10% 5% 10%;
+        z-index: 0;
+    }
+
+    #revealbutton {
+        cursor: pointer;
+        margin: auto;
+        position: absolute;
+        top: 0%;
+        left: 0%;
+        width: 100%;
+    }
+</style>
+
+<body>
+    <script>
+        function reveal() {
+            let element = document.getElementById("revealbutton");
+            element.onclick = null;
+            element.style.cursor = "auto";
+            let opacity = 1.0;
+            let id = setInterval(update, 50);
+            function update() {
+                if (opacity <= 0) {
+                    element.style.display = "none";
+                    clearInterval(id);
+                }
+                else {
+                    opacity -= 0.05;
+                    element.style.opacity = opacity;
+                }
+            }
+        }
+    </script>
+
+    <div id="hiddenreveal">
+        <p>
+            Preparing to start at the Digital Futures academy on the Software Engineering course.
+        </p>
+        <img id="revealbutton" onclick="reveal()" src="/assets/images/smoke.gif">
+    </div>
+</body>
+
+</html>

@@ -25,30 +25,13 @@ title: "Home"
         }
     }
 
-    #hiddenreveal {
+    #hiddenframe {
         width: 80%;
+        display: block;
         margin: auto;
+        border: none;
         position: relative;
-        border: 3px solid rgb(255, 216, 70);
-        border-radius: 50px;
-        box-shadow: 0px 0px 5px 0px rgba(255, 216, 70, 0.75);
         overflow: hidden;
-    }
-
-    #hiddenreveal p {
-        position: relative;
-        text-align: center;
-        margin: 5% 10% 5% 10%;
-        z-index: 0;
-    }
-
-    #revealbutton {
-        cursor: pointer;
-        margin: auto;
-        position: absolute;
-        top: 0%;
-        left: 0%;
-        width: 100%;
     }
 </style>
 
@@ -89,11 +72,6 @@ title: "Home"
         Some of my college and university projects are available from the link above, although I am still in the process
         of adding them.
     </p>
-    <h1>Currently I'm</h1>
-    <div id="hiddenreveal">
-        <p>
-            Preparing to start at the Digital Futures academy on the Software Engineering course.
-        </p>
-        <img id="revealbutton" onclick="reveal()" src="/assets/images/smoke.gif">
-    </div>
+    <h1>Currently I'm...</h1>
+    <iframe src="./hiddenstatus.html" id="hiddenframe"></iframe>
 </div>

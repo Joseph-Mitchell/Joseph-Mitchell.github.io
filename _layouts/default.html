@@ -1,37 +1,38 @@
 <!DOCTYPE html>
-<html lang="{{ site.lang | default: "en-US" }}">
-  <head>
-    <base target="_self">
-    <meta charset='utf-8'>
-    <meta http-equiv="X-UA-Compatible" content="IE=edge">
-    <meta name="viewport" content="width=device-width, initial-scale=1">
-    <link rel="stylesheet" href="{{ '/assets/css/style.css?v=' | append: site.github.build_revision | relative_url }}">
-    {% include head-custom.html %}
+<html lang="{{ site.lang | default: " en-US" }}">
 
-{% seo %}
-  </head>
+<head>
+  <base target="_self">
+  <meta charset='utf-8'>
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <link rel="stylesheet" href="{{ '/assets/css/style.css?v=' | append: site.github.build_revision | relative_url }}">
+  {% include head-custom.html %}
 
-  <body>
-    <header>
-      <div class="container" id="header">
-        <a id="a-title" href="{{ '/' | relative_url }}" target="_self">
-          <h1>{{ site.title | default: site.github.repository_name }}</h1>
-        </a>
-        <h2>{{ site.description | default: site.github.project_tagline }}</h2>
-        <a href="https://www.linkedin.com/in/joseph-mitchell-a18601214/" class="btn btn-linkedin"><span class="icon"></span>LinkedIn</a>
-        <a href="https://github.com/Joseph-Mitchell" class="btn btn-github"><span class="icon"></span>Github</a>
-      </div>
-    </header>
+  {% seo %}
+</head>
 
-    <div class="container">
-      <section id="main_content">
-        {{ content }}
-      </section>
+<body>
+  <header>
+    <div class="container" id="header">
+      <a id="a-title" href="{{ '/' | relative_url }}" target="_self">
+        <h1>{{ site.title | default: site.github.repository_name }}</h1>
+      </a>
+      <h2>{{ site.description | default: site.github.project_tagline }}</h2>
+      <a href="https://github.com/Joseph-Mitchell" class="btn btn-github"><span class="icon"></span>Github</a>
     </div>
+  </header>
 
-    <footer>
-      <p>&copy2023 Joseph Mitchell</p>
-      <a href="mailto:joejmitchell@hotmail.co.uk">joejmitchell@hotmail.co.uk</a>
-    </footer>
-  </body>
+  <div class="container">
+    <section id="main_content">
+      {{ content }}
+    </section>
+  </div>
+
+  <footer>
+    <p>&copy2023 Joseph Mitchell</p>
+    <a href="mailto:joejmitchell@hotmail.co.uk">joejmitchell@hotmail.co.uk</a>
+  </footer>
+</body>
+
 </html>
