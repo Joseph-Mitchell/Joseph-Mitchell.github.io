@@ -1,10 +1,9 @@
----
----
-
+--- 
+--- 
 @import "{{ site.theme }}";
 
 @media only screen and (max-device-width: 480px) {
-    #header{
+    #header {
         text-align: center;
     }
 }
@@ -37,11 +36,16 @@ header h1:before {
     background: url("../images/linkedin.png") 0 0 no-repeat;
 }
 
-body{
-    background:rgb(21, 21, 21) url("../images/bkg.png") 0 0
+body {
+    background: rgb(21, 21, 21) url("../images/bkg.png") 0 0
 }
 
-h1, h2, h3, h4, h5, h6 {
+h1,
+h2,
+h3,
+h4,
+h5,
+h6 {
     color: rgb(255, 216, 70);
     text-shadow: 0 0 5px rgba(255, 215, 70, 0.75);
 }
@@ -99,17 +103,17 @@ img {
 /* code snippets */
 
 /* snippet frame */
-.highlight > pre {
-    background: rgb(6,0,13);
+.highlight>pre {
+    background: rgb(6, 0, 13);
     color: white;
     border: 1px solid rgb(255, 216, 70);
     box-shadow: 0px 0px 5px 0px rgba(255, 216, 70, 0.75),
-                inset 0px 0px 5px 0px rgba(255, 216, 70, 0.75);
+        inset 0px 0px 5px 0px rgba(255, 216, 70, 0.75);
 }
 
 /* code with line nos */
-td.code > pre {
-    background: rgb(6,0,13);
+td.code>pre {
+    background: rgb(6, 0, 13);
     border: unset;
     color: white;
     padding: 0px 10px 0px 0px;
@@ -117,13 +121,13 @@ td.code > pre {
 
 /* line nos */
 pre.lineno {
-    background: rgb(6,0,13);
+    background: rgb(6, 0, 13);
     border: unset;
     color: rgba(255, 255, 255, 0.3);
     padding: 0px 0px 0px 10px;
 }
 
-.widecode > .highlight > pre::before {
+.widecode>.highlight>pre::before {
     content: "shift + scroll to scroll horizontally\A";
     color: rgba(255, 255, 255, 0.3);
     padding: 0px 0px 0px 15px;
@@ -132,7 +136,18 @@ pre.lineno {
 }
 
 /* strings */
-.highlight .s, .highlight .sb, .highlight .sc, .highlight .sd, .highlight .s2, .highlight .se, .highlight .sh, .highlight .si, .highlight .sx, .highlight .sr, .highlight .s1, .highlight .ss {
+.highlight .s,
+.highlight .sb,
+.highlight .sc,
+.highlight .sd,
+.highlight .s2,
+.highlight .se,
+.highlight .sh,
+.highlight .si,
+.highlight .sx,
+.highlight .sr,
+.highlight .s1,
+.highlight .ss {
     color: #d78d70;
 }
 
@@ -142,7 +157,8 @@ pre.lineno {
 }
 
 /* bulletins and functions */
-.highlight .nb, .highlight .nf {
+.highlight .nb,
+.highlight .nf {
     color: #e0e0a3;
 }
 
@@ -156,9 +172,9 @@ pre.lineno {
     color: #3f9fe4;
 }
 
-footer{
+footer {
     text-align: center;
-    background-color: rgb(6,0,13);
+    background-color: rgb(6, 0, 13);
     left: 0;
     bottom: 0;
     width: 100%;
@@ -170,4 +186,15 @@ footer{
 
 footer p {
     margin: 0 0 3px 0;
+}
+
+.textcard {
+    background: rgb(6, 0, 13);
+    color: white;
+    border: 1px solid rgb(255, 216, 70);
+    border-radius: 5px;
+    box-shadow: 0px 0px 5px 0px rgba(255, 216, 70, 0.75),
+        inset 0px 0px 5px 0px rgba(255, 216, 70, 0.75);
+    padding: 7px 15px 7px 15px;
+    margin: 15px;
 }
