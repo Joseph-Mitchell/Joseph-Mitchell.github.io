@@ -1,0 +1,148 @@
+---
+title: "Address Book"
+layout: project
+date: "May 2024"
+links: ["https://github.com/Joseph-Mitchell/Address-Book-Challenge"]
+link_names: ["GitHub"]
+tags: ["Java", "Digital Futures"]
+images: 1
+toc: true
+---
+
+<h2>Background & Purpose</h2>
+<p>
+    This was a software challenge during my time at Digital Futures academy. It was given to us in order to test our
+    ability to create a full Java program with a set of constraints. The full list of expectations for this challenge
+    can be found in the readme of the
+    <a href="https://github.com/Joseph-Mitchell/Address-Book-Challenge">GitHub page.</a>
+</p>
+
+<h2>Skill-scope</h2>
+<p>
+    This project demonstrates my ability to:
+
+<ul>
+    <li>Consider the benifits and risks of a project.</li>
+    <li>Break down a problem into discrete and prioritised tasks.</li>
+    <li>Use Object Oriented Design principles in the planning and development of a program.</li>
+    <li>Use Test Driven Development practices to manage testing of a program.</li>
+    <li>Create programs using Java.</li>
+</ul>
+</p>
+
+<h2>Program Description</h2>
+<p>
+    The project is a command line application which allows a user to store a number of contacts, similar to a real
+    address
+    book. Users can navigate the program to display or search through existing contacts, and can also create new
+    contacts as
+    well as edit or delete existing contacts. Below are screenshots of each submenu of the program.
+</p>
+<details>
+    <summary>Screenshots</summary>
+
+    <div class="grid" style="grid-template-columns: 50% 50%;">
+        <div>
+            <p class="caption">Main Menu</p>
+            <img src="{{layout.image_source}}{{page.title}}/gall1.png">
+            <br>
+        </div>
+        <div>
+            <p class="caption">Display Contacts</p>
+            <img src="{{layout.image_source}}{{page.title}}/program0.png">
+            <br>
+        </div>
+        <div>
+            <p class="caption">Add a New Contact</p>
+            <img src="{{layout.image_source}}{{page.title}}/program1.png">
+            <br>
+        </div>
+        <div>
+            <p class="caption">Remove a Contact</p>
+            <img src="{{layout.image_source}}{{page.title}}/program2.png">
+            <br>
+        </div>
+        <div>
+            <p class="caption">Edit a Contact</p>
+            <img src="{{layout.image_source}}{{page.title}}/program3.png">
+            <br>
+        </div>
+        <div>
+            <p class="caption">Search Contacts</p>
+            <img src="{{layout.image_source}}{{page.title}}/program4.png">
+            <br>
+        </div>
+    </div>
+</details>
+<br>
+
+<h2>Project Planning</h2>
+<p>
+    For the first stage of planning I separated the problem into the following user stories:
+</p>
+
+<details>
+    <summary>User Stories</summary>
+
+    <div class="grid" style="grid-template-columns: 50% 50%;">
+        <div class="textcard">
+            <p>
+                As a user,<br>
+                I want to add a contact to the address book,<br>
+                so I can remember their details.
+            </p>
+        </div>
+        <div class="textcard">
+            <p>
+                As a user,<br>
+                I want to view the contacts in the address book,<br>
+                so I can look through all my contacts.
+            </p>
+        </div>
+        <div class="textcard">
+            <p>
+                As a user,<br>
+                I want to be able to view contacts in pages,<br>
+                so that I do not get overwhelmed with information.
+            </p>
+        </div>
+        <div class="textcard">
+            <p>
+                As a user,<br>
+                I want to edit a contacts details,<br>
+                so that I can fix mistakes and update details.
+            </p>
+        </div>
+        <div class="textcard">
+            <p>
+                As a user,<br>
+                I want to find a contact by searching for it,<br>
+                so that I can find the contact I want.
+            </p>
+        </div>
+        <div class="textcard">
+            <p>
+                As a user,<br>
+                I want to see a message after completing an action,<br>
+                so that I can know whether the action was successful.
+            </p>
+        </div>
+        <div class="textcard">
+            <p>
+                As a user,<br>
+                I want to exit the program using built in UI,<br>
+                so that I can end the program elegantly.
+            </p>
+        </div>
+    </div>
+</details>
+
+<p>
+    From these user stories, I worked out the required objects for the program and translated them into a class diagram:
+</p>
+
+<details>
+    <summary>Class Diagram</summary>
+    <br>
+    <img src="{{layout.image_source}}{{page.title}}/classDiag.png">
+</details>
