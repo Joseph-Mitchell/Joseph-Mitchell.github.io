@@ -25,10 +25,6 @@ image_source: "/assets/images/"
         width: 90%;
     }
 
-    .grid div {
-        margin: auto 0% auto 0%;
-    }
-
     #project-title {
         text-align: center;
         margin: auto;
@@ -64,7 +60,8 @@ image_source: "/assets/images/"
         box-shadow: none;
     }
 
-    #nextslide, #prevslide {
+    #nextslide,
+    #prevslide {
         cursor: pointer;
         position: absolute;
         top: 0px;
@@ -81,7 +78,8 @@ image_source: "/assets/images/"
         user-select: none;
     }
 
-    #nextslide:hover, #prevslide:hover {
+    #nextslide:hover,
+    #prevslide:hover {
         color: rgb(249, 255, 219);
         text-shadow: 0 0 5px rgba(249, 255, 219, 0.75);
     }
@@ -129,7 +127,7 @@ image_source: "/assets/images/"
         text-align: center;
         font-size: small;
     }
-    
+
     .toc {
         margin: auto;
         border: 2px solid rgb(255, 216, 70);
@@ -137,34 +135,35 @@ image_source: "/assets/images/"
         box-shadow: 0px 0px 5px 0px rgba(255, 216, 70, 0.75);
         width: fit-content;
     }
-    
+
     .toc h2 {
         text-align: center;
         margin: 8px 0px 3px 0px;
     }
-    
+
     .toc #contents {
         padding: 0px 15px 15px 15px;
         margin: 0;
     }
-    
+
     .toc ul {
         counter-reset: entry;
         padding-left: 25px;
     }
-    
+
     .toc #contents li {
         list-style-type: none;
         list-style-image: none;
-    }   
-    
+    }
+
     .toc #contents li:before {
         content: counters(entry, ".");
         counter-increment: entry;
-        color: rgba(255, 255, 255, 0.3);;
+        color: rgba(255, 255, 255, 0.3);
+        ;
     }
 </style>
-
+<a href="/projects">&lt;-- Back</a>
 <h1 id="project-title">{{page.title}}</h1>
 <h4 id="project-date">{{page.date | date: "%b %Y"}}</h4>
 
@@ -174,15 +173,15 @@ image_source: "/assets/images/"
     <img class="slide" src="/assets/images/{{page.title}}/gall{{i}}.png">
     {% endfor %}
     <div id="gallui">
-    {% if page.images > 1 %}
-    <button id="prevslide" onclick="changeSlide(-1)">&lt;</button>
-    <button id="nextslide" onclick="changeSlide(1)">&gt;</button>
-    <div id="gallpips">
-        {% for i in (1..page.images) %}
-        <span class="pip"></span>
-        {% endfor %}
-    </div>
-    {% endif %}
+        {% if page.images > 1 %}
+        <button id="prevslide" onclick="changeSlide(-1)">&lt;</button>
+        <button id="nextslide" onclick="changeSlide(1)">&gt;</button>
+        <div id="gallpips">
+            {% for i in (1..page.images) %}
+            <span class="pip"></span>
+            {% endfor %}
+        </div>
+        {% endif %}
     </div>
 </div>
 {% if page.images > 1 %}
@@ -196,10 +195,10 @@ image_source: "/assets/images/"
         var slides = document.getElementsByClassName("slide");
         var pips = document.getElementsByClassName("pip");
         if (n > slides.length) {
-            slideIndex = 1
+            slideIndex = 1;
         }
         if (n < 1) {
-            slideIndex = slides.length
+            slideIndex = slides.length;
         }
         for (var i = 0; i < slides.length; i++) {
             slides[i].style.display = "none";
@@ -207,17 +206,17 @@ image_source: "/assets/images/"
             pips[i].style.opacity = 0.5;
             pips[i].style.boxShadow = "none";
         }
-        slides[slideIndex-1].style.display = "block";
-        pips[slideIndex-1].style.backgroundImage = "url(\"/assets/images/pipcurrent.png\")";
-        pips[slideIndex-1].style.opacity = 1;
-        pips[slideIndex-1].style.boxShadow = "0px 0px 5px 0px rgba(255, 216, 70, 0.75)";
+        slides[slideIndex - 1].style.display = "block";
+        pips[slideIndex - 1].style.backgroundImage = "url(\"/assets/images/pipcurrent.png\")";
+        pips[slideIndex - 1].style.opacity = 1;
+        pips[slideIndex - 1].style.boxShadow = "0px 0px 5px 0px rgba(255, 216, 70, 0.75)";
     }
 </script>
 {% endif %}
 {% endif %}
 
 {% if page.links and page.link_names %}
-<p id="project-links">Links: 
+<p id="project-links">Links:
     {% for link in page.links %}
     <a href="{{page.links[forloop.index0]}}" target="_blank">{{page.link_names[forloop.index0]}}</a>
     {% endfor %}
@@ -227,14 +226,14 @@ image_source: "/assets/images/"
 {% endif %}
 
 {% capture after_anchors %}
-    {% include anchor_headings.html html=content generateId=true %}
+{% include anchor_headings.html html=content generateId=true %}
 {% endcapture %}
 
 {% if page.toc %}
-    <div class="toc">
-        <h2>Contents</h2>
-        {% include toc.html html=after_anchors h_max=3 skip_no_ids=true id="contents" %}
-    </div>
+<div class="toc">
+    <h2>Contents</h2>
+    {% include toc.html html=after_anchors h_max=3 skip_no_ids=true id="contents" %}
+</div>
 {% endif %}
 
 {{after_anchors}}
