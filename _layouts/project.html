@@ -162,7 +162,37 @@ image_source: "/assets/images/"
         color: rgba(255, 255, 255, 0.3);
         ;
     }
+    
+    #toTopButton {
+        position: fixed;
+        right: 180px;
+        bottom: 80px;
+        
+        background: none;
+        border: none;
+    }
+    
+    #toTopButton:hover {
+        cursor: pointer;
+    }
+    
+    #toTopButton img {
+        width: 100px;
+        height: 100px;
+        margin: none;
+        border: none;
+        box-shadow: none;
+        content:url(/assets/images/totop.png)
+    }
+    
+    #toTopButton:hover img {
+        content:url(/assets/images/totophover.png)
+    }
 </style>
+
+<button onclick="scrollToTop()" id="toTopButton" title="Go to top">
+    <img>
+</button>
 <a href="/projects">&lt;-- Back</a>
 <h1 id="project-title">{{page.title}}</h1>
 <h4 id="project-date">{{page.date | date: "%b %Y"}}</h4>
@@ -185,6 +215,7 @@ image_source: "/assets/images/"
     </div>
 </div>
 {% if page.images > 1 %}
+<!-- Image gallery script -->
 <script>
     var slideIndex = 1;
     showSlide(slideIndex);
@@ -211,7 +242,9 @@ image_source: "/assets/images/"
         pips[slideIndex - 1].style.opacity = 1;
         pips[slideIndex - 1].style.boxShadow = "0px 0px 5px 0px rgba(255, 216, 70, 0.75)";
     }
+    
 </script>
+
 {% endif %}
 {% endif %}
 
@@ -235,5 +268,26 @@ image_source: "/assets/images/"
     {% include toc.html html=after_anchors h_max=3 skip_no_ids=true id="contents" %}
 </div>
 {% endif %}
+
+<!-- Scroll to top button script -->
+<script>
+    let toTopButton = document.getElementById("toTopButton");
+    
+    window.onscroll = function() {scrollFunction()};
+    function scrollFunction() {
+        
+        if (document.body.scrollTop > 170 || document.documentElement.scrollTop > 170) {
+            toTopButton.style.display = "block";
+            
+        } else {
+            toTopButton.style.display = "none";
+        }
+    }
+    
+    function scrollToTop() {
+        document.body.scrollTop = 0;
+        document.documentElement.scrollTop = 0;
+    }
+</script>
 
 {{after_anchors}}
