@@ -22,10 +22,10 @@ toc: true
     This project demonstrates my ability to:
 
 <ul>
-    <li>Consider the benifits and risks of a project.</li>
     <li>Break down a problem into discrete and prioritised tasks.</li>
     <li>Use Object Oriented Design principles in the planning and development of a program.</li>
     <li>Use Test Driven Development practices to manage testing of a program.</li>
+    <li>Writing tests using Java testing libraries including JUnit and Mockito</li>
     <li>Create programs using Java.</li>
 </ul>
 </p>
@@ -146,3 +146,388 @@ toc: true
     <br>
     <img src="{{layout.image_source}}{{page.title}}/classDiag.png">
 </details>
+<br>
+
+<h2>Code Highlights</h2>
+<h3 style="text-align: left;">User Interaction</h3>
+<h4>Code</h4>
+<p>
+    The UI of the program is handled in the UserInteraction class. Choosing an option from the main menu calls the
+    relevant method, after which the while loop in the mainMenu method returns the user there.
+</p>
+{% highlight java linenos %}
+public static void mainMenu(AddressBook addressBook) {
+    while(true) {
+        System.out.print("""
+            Please choose an option:
+
+            0. Display contacts
+            1. Add a new contact
+            2. Remove a contact
+            3. Edit a contact
+            4. Search contacts
+            5. Exit
+            """);
+
+        int choice = InputReceiver.receiveInt(5);
+
+        switch (choice) {
+            case 0:
+                displayContacts(addressBook);
+                break;
+            case 1:
+                addContact(addressBook);
+                break;
+            case 2:
+                removeContact(addressBook);
+                break;
+            case 3:
+                editContact(addressBook);
+                break;
+            case 4:
+                findContact(addressBook);
+                break;
+            case 5:
+                System.exit(0);
+        }
+    }
+}
+{% endhighlight %}
+<p>
+    Each function uses a number of calls to the InputReceiver, AddressBook or ContactPrinter classes.
+    For instance, below is the addContact function, which recieves multiple inputs to create the contract, prints the
+    full contract, and then adds the contract to the address book.
+</p>
+{% highlight java linenos %}
+public static void addContact(AddressBook addressBook) {
+    System.out.println("First Name:");
+    String firstName = InputReceiver.receiveString();
+    System.out.println("Last Name:");
+    String lastName = InputReceiver.receiveString();
+    System.out.println("Phone:");
+    String phone = InputReceiver.receivePhone(addressBook.getContacts());
+    System.out.println("Email:");
+    String email = InputReceiver.receiveEmail(addressBook.getContacts());
+    LinkedHashMap<String, String> details = InputReceiver.receiveDetails();
+
+    Contact contact = new Contact(firstName, lastName, phone, email, details);
+
+    ContactPrinter.printContact(contact);
+    System.out.println("Add this contact? (y/n):");
+
+    if (InputReceiver.receiveYesNo()) {
+        addressBook.addContact(contact);
+        System.out.println("Contact was added");
+    } else {
+        System.out.println("Contact was not added");
+    }
+}
+{% endhighlight %}
+
+<h4>Reflections</h4>
+<p>
+    I think the separation of concerns between classes was done well, although as this class is both responsible for 
+    presenting the UI to the user, and interfacing between classes to construct a new contact, this separation could 
+    probably be done better.
+    I also think that some af the functions in this class could be further separated for better readability, as the 
+    large amount of lines in some functions suggests a lack in single responsibility.
+</p>
+
+<h3 style="text-align: left;">Address Book</h3>
+<h4>Code</h4>
+<p>
+    The Address book class is a basic CRUD style class, which holds and manages a list of Contacts, while Contact is a simple data class holding details for a contact.
+</p>
+{% highlight java linenos %}
+public class AddressBook {
+    private final ArrayList<Contact> contacts = new ArrayList<>();
+
+    public ArrayList<Contact> getContacts() {
+        return contacts;
+    }
+
+    public Contact getContact(int index) {
+        return contacts.get(index);
+    }
+
+    public void addContact(Contact contact) throws IllegalArgumentException {
+        if (contact == null) {
+            throw new IllegalArgumentException();
+        }
+
+        contacts.add(contact);
+    }
+
+    public void removeContact(int index) {
+        if (index < 0 || index >= contacts.size()) {
+            throw new IllegalArgumentException("Index was out of range");
+        }
+
+        contacts.remove(index);
+    }
+}
+{% endhighlight %}
+{% highlight java linenos %}
+public class Contact {
+    private String firstName;
+    private String lastName;
+    private String phone;
+    private String email;
+    private final LinkedHashMap<String, String> details; //Custom details added by the user
+
+    public Contact(String firstName, String lastName, String phone,
+                   String email, LinkedHashMap<String, String> details) {
+
+        if (!Validate.string(firstName) || !Validate.string(lastName)
+                || !Validate.phone(phone)  || !Validate.email(email)
+                || !Validate.details(details)) {
+            throw new IllegalArgumentException();
+        }
+
+        this.firstName = firstName;
+        this.lastName = lastName;
+        this.phone = phone;
+        this.email = email;
+        this.details = details;
+    }
+
+    public void setFirstName(String firstName) {
+        this.firstName = firstName;
+    }
+
+    public void setLastName(String lastName) {
+        this.lastName = lastName;
+    }
+
+    public void setPhone(String phone) {
+        this.phone = phone;
+    }
+
+    public void setEmail(String email) {
+        this.email = email;
+    }
+
+    public String getFirstName() {
+        return firstName;
+    }
+
+    public String getLastName() {
+        return lastName;
+    }
+
+    public String getPhone() {
+        return phone;
+    }
+
+    public String getEmail() {
+        return email;
+    }
+
+    public LinkedHashMap<String, String> getDetails() {
+        return details;
+    }
+
+    public void addDetail(String key, String value) {
+        details.put(key, value);
+    }
+
+    public void setDetail(String key, String value) {
+        details.replace(key, value);
+    }
+
+    public void removeDetail(String key) {
+        details.remove(key);
+    }
+}
+{% endhighlight %}
+
+<h4>Reflections</h4>
+<p>
+    The responsibilities of the AddressBook class are not fully consistent, as it does not have a function for editing 
+    a contact, instead having the UserInteraction class take a reference to a contact and edit it directly.<br>
+    The Contact class also has issues, as despite being a data class it still has some functions for dealing with 
+    custom contact details which should be done by an external class such as UserInteraction.
+</p>
+
+<h3 style="text-align: left;">Contact Printer</h3>
+<h4>Code</h4>
+<p>
+    The ContactPrinter class has three functions: printContact prints a contact to the console; printAllContacts 
+    strings output from printContact together for all contacts in a given list; and printMatchingContacts does the same 
+    but only for contacts whos first or last name match a given string.
+</p>
+
+{% highlight java linenos %}
+public static void printContact(Contact contact)
+        throws IllegalArgumentException {
+
+    if (contact == null) {
+        throw new IllegalArgumentException("Contact was null");
+    }
+
+    String output = """
+            --------------------
+            First Name: %s
+            Last Name: %s
+            Phone: %s
+            Email: %s
+            """.formatted(contact.getFirstName(), contact.getLastName(),
+                            contact.getPhone(), contact.getEmail());
+
+    for (Map.Entry<String, String> e : contact.getDetails().entrySet()) {
+        output = output.concat("%s: %s\n".formatted(e.getKey(), e.getValue()));
+    }
+
+    output += "--------------------\n";
+
+    System.out.print(output);
+}
+{% endhighlight %}
+{% highlight java linenos %}
+public static void printAllContacts(ArrayList<Contact> contacts)
+        throws IllegalArgumentException {
+
+    if (contacts == null) {
+        throw new IllegalArgumentException("Contact list was null");
+    }
+
+    for (int i = 0; i < contacts.size(); i++) {
+        System.out.println(i);
+        printContact(contacts.get(i));
+    }
+}
+{% endhighlight %}
+{% highlight java linenos %}
+public static void printMatchingContacts(ArrayList<Contact> contacts, String comparitor)
+        throws IllegalArgumentException {
+    boolean anyMatch = false;
+
+    if (!Validate.string(comparitor) || contacts == null) {
+        throw new IllegalArgumentException();
+    }
+
+    String prepared = comparitor.strip().toLowerCase();
+
+    for (Contact c : contacts) {
+        if (c.getFirstName().toLowerCase().contains(prepared)
+                || c.getLastName().toLowerCase().contains(prepared)) {
+            printContact(c);
+            anyMatch = true;
+        }
+    }
+
+    if (!anyMatch) {
+        System.out.println("No contacts found");
+    }
+}
+{% endhighlight %}
+
+<h4>Reflections</h4>
+<p>
+    It could be argued that printMatchingContacts is not appropriate for the ContactPrinter class, as it should only be
+    responsible for printing contacts to the console, and not for deciding which contacts should be printed.
+</p>
+
+<h3 style="text-align: left;">Input Receiver</h3>
+<h4>Code</h4>
+<p>
+    The functions in this class prompt the user for a variety of different formats of input. Each function has the same
+    basic format, consisting of a while loop which continues to prompt for valid input as long as the users inputs are
+    invalid.
+</p>
+<p>
+    Below is the receivePhone function, which shows how each function recieves and checks input.
+</p>
+{% highlight java linenos %}
+public static String receivePhone(ArrayList<Contact> contacts) {
+    String candidate;
+    Set<String> phoneNumbers = new HashSet<>();
+    for (Contact c : contacts) {
+        phoneNumbers.add(c.getPhone());
+    }
+
+    while (true) {
+        candidate = input.nextLine();
+        if(!Validate.phone(candidate)) {
+            System.out.println("Please enter a number");
+        } else if (phoneNumbers.contains(candidate)) {
+                System.out.println("Phone already used by another contact");
+        } else {
+            break;
+        }
+    }
+    return candidate;
+}
+{% endhighlight %}
+<h4>Reflections</h4>
+<p>
+    There are a few points of improvement to consider for the InputReceiver class.<br>
+    Firstly, the main reason for separating so much of the logic into separate methods despite having much reused
+    functionality is because the type of data handled by each method is different (e.g. receiveInt and receiveString).
+    This could be fixed by introducing generics to reduce the amount of reused code.<br>
+    Another issue is made within methods such as receivePhone and receiveEmail, where a list of full contacts is 
+    required when only one contact detail is ever used. It should be the responsibility of the calling method to 
+    pass through only the required variables.<br>
+    Finally, the user experience could be improved, as if a user wants to cancel an option while being prompted for
+    input, they must go through the process until prompted if they want to cancel, rather than being able to cancel at
+    any time without closing the program.
+</p>
+
+<h3 style="text-align: left;">Validate</h3>
+<h4>Code</h4>
+<p>
+    The Validate class is a utility class which is used by the methods of InputReceiver to do basic validation on user
+    input. This validation is basic and mainly checks that a users input can be translated into the format required,
+    rather than anything more specific such as whether an integer is within a range or an email is already present in
+    an existing contact.
+</p>
+{% highlight java linenos %}
+public class Validate {
+
+    public static boolean integer(String candidate, int cap) {
+        try {
+            int parsedCandidate = Integer.parseInt(candidate);
+            return parsedCandidate >= 0 && parsedCandidate <= cap;
+        } catch (Exception e) {
+            return false;
+        }
+    }
+
+    public static boolean string(String candidate) {
+        return candidate != null && !candidate.isBlank();
+    }
+
+    public static boolean phone(String candidate) {
+        return candidate != null && candidate.matches("[0-9]+");
+    }
+
+    public static boolean email(String candidate) {
+        return candidate != null && candidate.matches("[a-z]+@[a-z]+\\.[a-z]+");
+    }
+
+    public static boolean yesNo(String candidate) {
+        return candidate != null && candidate.matches("[yn]");
+    }
+
+    private static boolean checkStringsInCollection(Collection<String> collection) {
+        for (String s : collection) {
+            if (s == null || s.isBlank()) {
+                return false;
+            }
+        }
+        return true;
+    }
+
+    public static boolean details(LinkedHashMap<String, String> candidate) {
+        if (candidate == null) {
+            return false;
+        }
+        return checkStringsInCollection(candidate.keySet())
+                && checkStringsInCollection(candidate.values());
+    }
+}
+{% endhighlight %}
+<h4>Reflections</h4>
+<p>
+    Because of the simplicity of this class, there is little room for improvement.
+</p>
